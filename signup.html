@@ -371,16 +371,40 @@
 
       if (!ok) { toast('Please complete all required fields.', 'bad'); return; }
 
-      // Save user to localStorage
+      // Prepare user data
       const newUser = {
         name: document.getElementById('s-name').value.trim(),
         phone: document.getElementById('s-phone').value.trim(),
         email: document.getElementById('s-email').value.trim(),
+        password: document.getElementById('s-pass').value, // Store password for login verification
         prefs: selectedPrefs,
-        loggedIn: true,
         createdAt: new Date().toISOString()
       };
-      Auth.save(newUser); Auth.updateNav();
+
+      // Register account (stores email & password for login verification)
+      const registered = Auth.registerAccount(newUser.email, newUser.password, {
+        name: newUser.name,
+        phone: newUser.phone,
+        prefs: newUser.prefs,
+        createdAt: newUser.createdAt
+      });
+
+      if (!registered) {
+        toast('❌ Email already registered. Please login instead.', 'bad');
+        return;
+      }
+
+      // Log in the new user (save to current user session)
+      const loggedInUser = {
+        name: newUser.name,
+        phone: newUser.phone,
+        email: newUser.email,
+        prefs: newUser.prefs,
+        loggedIn: true,
+        createdAt: newUser.createdAt
+      };
+      Auth.save(loggedInUser);
+      Auth.updateNav();
 
       const btn = document.getElementById('signup-btn');
       btn.innerHTML = '<i class="fa-solid fa-check"></i> Account Created!';

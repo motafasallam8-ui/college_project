@@ -327,21 +327,50 @@
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
 
-        // Check credentials
-        if (email !== DEMO.email || pass !== DEMO.password) {
-          setErr('l-email', 'Invalid email or password.');
-          setErr('l-pass', 'Invalid email or password.');
-          toast('❌ Incorrect credentials. Try: user@bistro.com / bistro123', 'bad');
+        // Check registered accounts first
+        const accountData = Auth.verifyLogin(email, pass);
+        
+        if (accountData) {
+          // User found in registered accounts - login successful
+          const user = { 
+            email: accountData.email,
+            name: accountData.name,
+            phone: accountData.phone,
+            prefs: accountData.prefs || [],
+            loggedIn: true,
+            createdAt: accountData.createdAt
+          };
+          Auth.save(user);
+          Auth.updateNav();
+          
+          toast('✅ Welcome back, ' + (user.name.split(' ')[0]) + '! Redirecting...', 'ok');
+          setTimeout(() => window.location.href = 'profile.html', 1200);
           return;
         }
 
-        // Save session using Auth
-        const user = { email, name: 'John Doe', phone: '+1 555 000 0000', loggedIn: true, prefs: ['mains', 'desserts', 'drinks'], createdAt: '2024-01-01T00:00:00Z', time: new Date().toISOString() };
-        Auth.save(user);
-        Auth.updateNav();
+        // Demo credentials fallback (for testing)
+        if (email === DEMO.email && pass === DEMO.password) {
+          const user = { 
+            email, 
+            name: 'John Doe', 
+            phone: '+1 555 000 0000', 
+            loggedIn: true, 
+            prefs: ['mains', 'desserts', 'drinks'], 
+            createdAt: '2024-01-01T00:00:00Z', 
+            time: new Date().toISOString() 
+          };
+          Auth.save(user);
+          Auth.updateNav();
 
-        toast('✅ Welcome back, John! Redirecting...', 'ok');
-        setTimeout(() => window.location.href = 'profile.html', 1200);
+          toast('✅ Welcome back, John! Redirecting...', 'ok');
+          setTimeout(() => window.location.href = 'profile.html', 1200);
+          return;
+        }
+
+        // No match found
+        setErr('l-email', 'Invalid email or password.');
+        setErr('l-pass', 'Invalid email or password.');
+        toast('❌ Incorrect credentials. Please check your email and password.', 'bad');
       }, 1400);
     });
 

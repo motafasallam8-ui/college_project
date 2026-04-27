@@ -16,10 +16,32 @@ const Theme = {
 
 const Auth = {
   KEY: 'br_user',
+  ACCOUNTS_KEY: 'br_accounts',
   get() { try { return JSON.parse(localStorage.getItem(this.KEY)); } catch { return null; } },
   save(u) { localStorage.setItem(this.KEY, JSON.stringify(u)); },
   logout() { localStorage.removeItem(this.KEY); toast('Logged out!', 'info'); setTimeout(() => window.location.href = 'index.html', 800); },
   loggedIn() { return !!this.get(); },
+  
+  // Get all registered accounts
+  getAccounts() { try { return JSON.parse(localStorage.getItem(this.ACCOUNTS_KEY) || '[]'); } catch { return []; } },
+  
+  // Save account to registered accounts list (for signup)
+  registerAccount(email, password, userData) {
+    const accounts = this.getAccounts();
+    const exists = accounts.find(a => a.email === email);
+    if (exists) return false; // Account already exists
+    accounts.push({ email, password, ...userData });
+    localStorage.setItem(this.ACCOUNTS_KEY, JSON.stringify(accounts));
+    return true;
+  },
+  
+  // Verify login credentials and return user data
+  verifyLogin(email, password) {
+    const accounts = this.getAccounts();
+    const account = accounts.find(a => a.email === email && a.password === password);
+    return account || null;
+  },
+  
   updateNav() {
     const user = this.get();
     document.querySelectorAll('.nav-login-btn').forEach(b => b.style.display = user ? 'none' : '');
