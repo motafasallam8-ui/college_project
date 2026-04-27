@@ -156,41 +156,99 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1.4rem;
-      margin-bottom: 1rem;
-      transition: all .2s
+      overflow: hidden;
+      margin-bottom: 1.2rem;
+      transition: all .3s
     }
 
     .order-card:hover {
       border-color: var(--accent);
-      box-shadow: var(--shadow)
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+      transform: translateY(-2px)
     }
 
-    .order-head {
+    .order-header-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: .8rem;
-      flex-wrap: wrap;
-      gap: .5rem
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.4rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, var(--bg2) 0%, transparent 100%)
+    }
+
+    .order-id-col {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      flex: 1
     }
 
     .order-id {
       font-family: 'Playfair Display', serif;
       font-weight: 700;
-      font-size: 1rem
+      font-size: 1.1rem;
+      color: var(--text)
     }
 
     .order-date {
       font-size: .75rem;
-      color: var(--muted)
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: .4rem
+    }
+
+    .order-date i {
+      font-size: .7rem
+    }
+
+    .order-price-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .4rem;
+      padding: 0 1rem;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border)
+    }
+
+    .order-price {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--accent)
+    }
+
+    .order-count {
+      font-size: .75rem;
+      background: var(--badge);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      font-weight: 600
+    }
+
+    .order-count i {
+      font-size: .65rem
     }
 
     .order-status {
-      padding: 5px 12px;
-      border-radius: 99px;
-      font-size: .7rem;
-      font-weight: 700
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: .75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      white-space: nowrap
+    }
+
+    .order-status i {
+      font-size: .85rem
     }
 
     .order-status.delivered {
@@ -208,33 +266,96 @@
       color: #3498db
     }
 
+    .order-items-section {
+      padding: 1.2rem 1.4rem;
+      background: linear-gradient(135deg, var(--bg) 0%, transparent 100%)
+    }
+
+    .order-items-label {
+      font-size: .75rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: .7rem
+    }
+
     .order-items-row {
       display: flex;
-      gap: .5rem;
-      flex-wrap: wrap;
-      margin-bottom: .8rem
+      gap: .6rem;
+      flex-wrap: wrap
     }
 
     .order-item-chip {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      padding: 4px 10px;
+      background: var(--card);
+      border: 1px solid var(--border2);
+      padding: 6px 12px;
       border-radius: 8px;
       font-size: .75rem;
+      color: var(--text2);
+      font-weight: 500;
+      transition: all .2s
+    }
+
+    .order-item-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .order-item-more {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 700
+    }
+
+    .order-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 1.4rem;
+      border-top: 1px solid var(--border);
+      gap: 1rem
+    }
+
+    .order-delivery-info {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: .8rem;
       color: var(--text2)
     }
 
-    .order-total-row {
+    .order-delivery-info span {
       display: flex;
-      justify-content: space-between;
-      align-items: center
+      align-items: center;
+      gap: .5rem
     }
 
-    .order-total {
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
+    .order-delivery-info i {
+      font-size: .9rem;
       color: var(--accent);
-      font-size: 1.1rem
+      width: 18px;
+      text-align: center
+    }
+
+    .order-view-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--badge);
+      color: var(--accent);
+      transition: all .2s;
+      text-decoration: none
+    }
+
+    .order-view-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateX(2px)
     }
 
     .no-orders {
@@ -330,11 +451,87 @@
       .stats-row {
         grid-template-columns: repeat(2, 1fr)
       }
+
+      .order-header-row {
+        flex-wrap: wrap;
+        gap: 1rem
+      }
+
+      .order-price-col {
+        border-left: none;
+        border-right: none;
+        padding: 0
+      }
     }
 
     @media(max-width:480px) {
       .stats-row {
         grid-template-columns: 1fr
+      }
+
+      .order-card {
+        margin-bottom: 1rem
+      }
+
+      .order-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .8rem;
+        padding: 1rem
+      }
+
+      .order-id-col {
+        width: 100%
+      }
+
+      .order-price-col {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0;
+        border: none
+      }
+
+      .order-status {
+        align-self: flex-start;
+        padding: 6px 10px;
+        font-size: .7rem
+      }
+
+      .order-items-section {
+        padding: 1rem
+      }
+
+      .order-items-label {
+        font-size: .7rem
+      }
+
+      .order-items-row {
+        gap: .4rem
+      }
+
+      .order-item-chip {
+        font-size: .7rem;
+        padding: 5px 9px
+      }
+
+      .order-footer-row {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+        gap: .8rem
+      }
+
+      .order-delivery-info {
+        font-size: .75rem;
+        gap: 1rem
+      }
+
+      .order-view-btn {
+        align-self: flex-end;
+        width: 28px;
+        height: 28px
       }
     }
   </style>
@@ -568,25 +765,39 @@
       }
       const list = limit ? orders.slice(0, limit) : orders;
       const statuses = ['delivered', 'delivered', 'preparing', 'placed'];
+      const statusIcons = { 'delivered': 'fa-check-circle', 'preparing': 'fa-hourglass-half', 'placed': 'fa-clipboard' };
       el.innerHTML = list.map((order, i) => {
         const status = order.status || statuses[i % statuses.length];
-        const itemNames = (order.items || []).map(it => it.name).slice(0, 3);
-        const extraCount = (order.items || []).length - 3;
+        const itemCount = (order.items || []).length;
+        const itemNames = (order.items || []).map(it => it.name);
+        const allItems = itemNames.slice(0, 5);
+        const extraCount = itemCount - 5;
+        const statusIcon = statusIcons[status] || 'fa-info-circle';
         return `<div class="order-card fade-up">
-      <div class="order-head">
-        <div>
+      <div class="order-header-row">
+        <div class="order-id-col">
           <div class="order-id">${order.id || 'ORD-' + (i + 1)}</div>
-          <div class="order-date"><i class="fa-regular fa-clock" style="margin-right:4px"></i>${order.date ? new Date(order.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recently'}</div>
+          <div class="order-date"><i class="fa-regular fa-calendar"></i>${order.date ? new Date(order.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Recently'}</div>
         </div>
-        <span class="order-status ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+        <div class="order-price-col">
+          <div class="order-price">$${(+order.total || 0).toFixed(2)}</div>
+          <div class="order-count"><i class="fa-solid fa-bag-shopping"></i> ${itemCount}</div>
+        </div>
+        <span class="order-status ${status}"><i class="fa-solid ${statusIcon}"></i> ${status.charAt(0).toUpperCase() + status.slice(1)}</span>
       </div>
-      <div class="order-items-row">
-        ${itemNames.map(n => `<span class="order-item-chip">${n}</span>`).join('')}
-        ${extraCount > 0 ? `<span class="order-item-chip">+${extraCount} more</span>` : ''}
+      <div class="order-items-section">
+        <div class="order-items-label">Items Ordered:</div>
+        <div class="order-items-row">
+          ${allItems.map(n => `<span class="order-item-chip">${n}</span>`).join('')}
+          ${extraCount > 0 ? `<span class="order-item-chip order-item-more">+${extraCount} more</span>` : ''}
+        </div>
       </div>
-      <div class="order-total-row">
-        <span style="font-size:.8rem;color:var(--muted)">${(order.items || []).length} item${(order.items || []).length !== 1 ? 's' : ''} · ${order.delivery === 0 ? 'Pick Up' : 'Delivery'}</span>
-        <span class="order-total">$${(+order.total || 0).toFixed(2)}</span>
+      <div class="order-footer-row">
+        <div class="order-delivery-info">
+          <span><i class="fa-solid fa-${order.delivery === 0 ? 'store' : 'truck'}"></i> ${order.delivery === 0 ? 'Pick Up' : 'Delivery'}</span>
+          ${order.address ? `<span><i class="fa-solid fa-map-pin"></i> ${order.address}</span>` : ''}
+        </div>
+        <a href="#" class="order-view-btn"><i class="fa-solid fa-arrow-right"></i></a>
       </div>
     </div>`;
       }).join('');
