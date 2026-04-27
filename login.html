@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bistro Royale — Login</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 1.5rem 2rem;
+      background: var(--bg2);
+      position: relative;
+      overflow: hidden
+    }
+
+    .auth-page::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, var(--bg3) 0%, transparent 60%)
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      z-index: 2;
+      animation: fadeInUp .6s both
+    }
+
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 2rem
+    }
+
+    .auth-logo .nav-logo {
+      font-size: 2rem;
+      display: inline-block;
+      margin-bottom: .5rem
+    }
+
+    .auth-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: .3rem
+    }
+
+    .auth-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: .85rem;
+      margin-bottom: 2rem
+    }
+
+    .pw-wrap {
+      position: relative
+    }
+
+    .pw-wrap input {
+      padding-right: 48px
+    }
+
+    .pw-eye {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: color .2s
+    }
+
+    .pw-eye:hover {
+      color: var(--accent)
+    }
+
+    .form-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      color: var(--muted);
+      font-size: .8rem
+    }
+
+    .form-divider::before,
+    .form-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border2)
+    }
+
+    .social-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .8rem;
+      margin-bottom: 1.5rem
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+      padding: 11px;
+      border: 1.5px solid var(--border2);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text2);
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none
+    }
+
+    .social-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .forgot-link {
+      float: right;
+      font-size: .78rem;
+      color: var(--accent);
+      margin-top: -8px;
+      margin-bottom: 1rem;
+      display: block
+    }
+
+    .remember-row {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: 1.5rem;
+      font-size: .85rem;
+      color: var(--text2)
+    }
+
+    .remember-row input {
+      accent-color: var(--accent)
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: .85rem;
+      color: var(--muted)
+    }
+
+    .auth-footer a {
+      color: var(--accent);
+      font-weight: 600
+    }
+
+    .strength-bar {
+      height: 4px;
+      border-radius: 99px;
+      background: var(--border2);
+      margin-top: 6px;
+      overflow: hidden
+    }
+
+    .strength-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: all .3s;
+      width: 0
+    }
+
+    .strength-text {
+      font-size: .7rem;
+      color: var(--muted);
+      margin-top: 3px
+    }
+
+    .login-btn-wrap {
+      position: relative
+    }
+
+    .login-spinner {
+      display: none;
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%)
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Bistro<span>Royale</span></a>
+      <div class="nav-right">
+        <button class="theme-toggle"></button>
+        <a href="signup.html" class="btn btn-outline btn-sm">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="nav-logo">Bistro<span style="color:var(--accent)">Royale</span></div>
+        <p style="font-size:.72rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase">Welcome Back</p>
+      </div>
+      <h2 class="auth-title">Sign In</h2>
+      <p class="auth-sub">Enter your credentials to access your account</p>
+
+      <!-- Social login (UI only) -->
+      <div class="social-btns">
+        <button class="social-btn" onclick="toast('Google login coming soon!','info')">
+          <i class="fa-brands fa-google" style="color:#ea4335"></i> Google
+        </button>
+        <button class="social-btn" onclick="toast('Facebook login coming soon!','info')">
+          <i class="fa-brands fa-facebook" style="color:#1877f2"></i> Facebook
+        </button>
+      </div>
+      <div class="form-divider">or sign in with email</div>
+
+      <!-- Login Form -->
+      <form id="login-form" novalidate>
+        <div class="fgroup">
+          <label for="l-email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+          <input type="email" id="l-email" placeholder="your@email.com" autocomplete="email">
+          <span class="ferr" id="l-email-e"></span>
+        </div>
+
+        <div class="fgroup">
+          <label for="l-pass"><i class="fa-solid fa-lock"></i> Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="l-pass" placeholder="Enter your password" autocomplete="current-password">
+            <button type="button" class="pw-eye" id="pw-toggle" aria-label="Toggle password">
+              <i class="fa-regular fa-eye" id="pw-icon"></i>
+            </button>
+          </div>
+          <span class="ferr" id="l-pass-e"></span>
+        </div>
+
+        <a href="#" class="forgot-link" onclick="toast('Password reset email sent!','info');return false">
+          Forgot password?
+        </a>
+
+        <div class="remember-row">
+          <input type="checkbox" id="remember" name="remember">
+          <label for="remember">Remember me for 30 days</label>
+        </div>
+
+        <div class="login-btn-wrap">
+          <button type="submit" class="btn btn-primary btn-block" id="login-btn">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In
+          </button>
+          <span class="login-spinner" id="login-spinner">
+            <i class="fa-solid fa-spinner" style="animation:spin 1s linear infinite;color:#fff"></i>
+          </span>
+        </div>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="signup.html">Create one free</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/global.js"></script>
+  <script>
+    // Demo credentials
+    const DEMO = { email: 'user@bistro.com', password: 'bistro123' };
+
+    const fields = {
+      'l-email': [V.required, V.email],
+      'l-pass': [V.required, V.minLen(6)],
+    };
+
+    const form = document.getElementById('login-form');
+    setupLiveValidation(fields, form);
+
+    // Password toggle
+    document.getElementById('pw-toggle').addEventListener('click', () => {
+      const inp = document.getElementById('l-pass');
+      const icon = document.getElementById('pw-icon');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.className = 'fa-regular fa-eye-slash';
+      } else {
+        inp.type = 'password';
+        icon.className = 'fa-regular fa-eye';
+      }
+    });
+
+    // Form submit - JS validation (no HTML5)
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      let ok = true;
+      Object.keys(fields).forEach(id => { if (!validateField(id, fields[id], form)) ok = false; });
+      if (!ok) { toast('Please fix the errors below.', 'bad'); return; }
+
+      // Show spinner
+      const btn = document.getElementById('login-btn');
+      const spinner = document.getElementById('login-spinner');
+      btn.disabled = true;
+      btn.innerHTML = 'Signing in...';
+      spinner.style.display = 'block';
+
+      // Simulate async check
+      setTimeout(() => {
+        const email = document.getElementById('l-email').value.trim();
+        const pass = document.getElementById('l-pass').value;
+        spinner.style.display = 'none';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+
+        // Check credentials
+        if (email !== DEMO.email || pass !== DEMO.password) {
+          setErr('l-email', 'Invalid email or password.');
+          setErr('l-pass', 'Invalid email or password.');
+          toast('❌ Incorrect credentials. Try: user@bistro.com / bistro123', 'bad');
+          return;
+        }
+
+        // Save session using Auth
+        const user = { email, name: 'John Doe', phone: '+1 555 000 0000', loggedIn: true, prefs: ['mains', 'desserts', 'drinks'], createdAt: '2024-01-01T00:00:00Z', time: new Date().toISOString() };
+        Auth.save(user);
+        Auth.updateNav();
+
+        toast('✅ Welcome back, John! Redirecting...', 'ok');
+        setTimeout(() => window.location.href = 'profile.html', 1200);
+      }, 1400);
+    });
+
+    // Check if already logged in
+    const user = Auth.get();
+    if (user && user.loggedIn) {
+      document.querySelector('.auth-sub').textContent = `Already signed in as ${user.email}`;
+    }
+  </script>
+</body>
+
+</html>

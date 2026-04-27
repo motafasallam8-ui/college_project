@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bistro Royale — My Profile</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 2rem;
+      align-items: start
+    }
+
+    /* Sidebar */
+    .profile-sidebar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      position: sticky;
+      top: 90px
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      padding: 2rem;
+      text-align: center;
+      color: #fff
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .2);
+      border: 3px solid rgba(255, 255, 255, .5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 1rem
+    }
+
+    .profile-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .2rem
+    }
+
+    .profile-email {
+      font-size: .78rem;
+      color: rgba(255, 255, 255, .8)
+    }
+
+    .profile-joined {
+      font-size: .7rem;
+      color: rgba(255, 255, 255, .6);
+      margin-top: .3rem
+    }
+
+    .profile-nav {
+      padding: 1rem
+    }
+
+    .profile-nav-btn {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      width: 100%;
+      padding: .9rem 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      font-family: 'Poppins', sans-serif;
+      font-size: .85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all .2s;
+      text-align: left;
+      text-decoration: none
+    }
+
+    .profile-nav-btn:hover {
+      background: var(--badge);
+      color: var(--accent)
+    }
+
+    .profile-nav-btn.active {
+      background: var(--badge);
+      color: var(--accent);
+      font-weight: 700
+    }
+
+    .profile-nav-btn i {
+      width: 20px;
+      text-align: center;
+      font-size: .9rem
+    }
+
+    .profile-nav-sep {
+      height: 1px;
+      background: var(--border);
+      margin: .5rem 0
+    }
+
+    /* Tabs */
+    .profile-tab {
+      display: none
+    }
+
+    .profile-tab.active {
+      display: block;
+      animation: fadeInUp .4s both
+    }
+
+    /* Stats strip */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem
+    }
+
+    .stat-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      text-align: center
+    }
+
+    .stat-box-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent)
+    }
+
+    .stat-box-lbl {
+      font-size: .72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-top: .3rem
+    }
+
+    /* Orders */
+    .order-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      margin-bottom: 1rem;
+      transition: all .2s
+    }
+
+    .order-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow)
+    }
+
+    .order-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: .8rem;
+      flex-wrap: wrap;
+      gap: .5rem
+    }
+
+    .order-id {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1rem
+    }
+
+    .order-date {
+      font-size: .75rem;
+      color: var(--muted)
+    }
+
+    .order-status {
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: .7rem;
+      font-weight: 700
+    }
+
+    .order-status.delivered {
+      background: rgba(39, 174, 96, .12);
+      color: #27ae60
+    }
+
+    .order-status.preparing {
+      background: rgba(243, 156, 18, .12);
+      color: #f39c12
+    }
+
+    .order-status.placed {
+      background: rgba(52, 152, 219, .12);
+      color: #3498db
+    }
+
+    .order-items-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-bottom: .8rem
+    }
+
+    .order-item-chip {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: .75rem;
+      color: var(--text2)
+    }
+
+    .order-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .order-total {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1.1rem
+    }
+
+    .no-orders {
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted)
+    }
+
+    .no-orders i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block
+    }
+
+    /* Settings form */
+    .settings-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem
+    }
+
+    .settings-card h4 {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .6rem
+    }
+
+    /* Reservations */
+    .res-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      margin-bottom: 1rem
+    }
+
+    .res-date-big {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent)
+    }
+
+    .res-row {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: .6rem
+    }
+
+    .res-detail {
+      font-size: .82rem;
+      color: var(--text2)
+    }
+
+    .res-detail i {
+      color: var(--accent);
+      margin-right: 4px
+    }
+
+    /* Favourite foods */
+    .fav-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem
+    }
+
+    .fav-chip {
+      background: var(--badge);
+      border: 1px solid var(--border2);
+      color: var(--accent);
+      padding: 7px 16px;
+      border-radius: 99px;
+      font-size: .8rem;
+      font-weight: 600
+    }
+
+    @media(max-width:900px) {
+      .profile-layout {
+        grid-template-columns: 1fr
+      }
+
+      .profile-sidebar {
+        position: static
+      }
+
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(max-width:480px) {
+      .stats-row {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Bistro<span>Royale</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="offers.html">Offers</a></li>
+        <li><a href="reservation.html">Reserve</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="theme-toggle" aria-label="Toggle theme"></button>
+        <a href="cart.html" class="cart-btn"><i class="fa-solid fa-cart-shopping"></i><span class="cart-count"
+            style="display:none">0</span></a>
+        <a href="login.html" class="btn btn-primary btn-sm nav-login-btn"><i class="fa-solid fa-right-to-bracket"></i>
+          Login</a>
+        <a href="profile.html" class="btn btn-outline btn-sm nav-profile-btn"
+          style="display:none;align-items:center;gap:6px">
+          <i class="fa-solid fa-circle-user"></i><span class="nav-user-name"></span>
+        </a>
+        <button class="ham" id="ham"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+  <nav class="mob-nav" id="mob-nav">
+    <a href="index.html">🏠 Home</a><a href="menu.html">🍽 Menu</a>
+    <a href="offers.html">🎁 Offers</a><a href="reservation.html">📅 Reserve</a>
+    <a href="profile.html">👤 Profile</a>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Your Account</p>
+      <h1>My <em style="color:var(--accent);font-style:italic">Profile</em></h1>
+    </div>
+  </div>
+
+  <main class="section">
+    <div class="container">
+      <div id="not-logged-in" style="display:none;text-align:center;padding:4rem 2rem">
+        <div style="font-size:5rem;margin-bottom:1rem">🔐</div>
+        <h2 style="margin-bottom:.5rem">Please Log In</h2>
+        <p style="margin-bottom:2rem;color:var(--muted)">You need to be logged in to view your profile.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+          <a href="login.html" class="btn btn-primary"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+          <a href="signup.html" class="btn btn-outline"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
+        </div>
+      </div>
+
+      <div class="profile-layout" id="profile-content" style="display:none">
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+          <div class="profile-header">
+            <div class="profile-avatar" id="p-avatar">👤</div>
+            <div class="profile-name" id="p-name">Loading...</div>
+            <div class="profile-email" id="p-email"></div>
+            <div class="profile-joined" id="p-joined"></div>
+          </div>
+          <nav class="profile-nav">
+            <button class="profile-nav-btn active" onclick="switchTab('overview',this)">
+              <i class="fa-solid fa-house"></i> Overview
+            </button>
+            <button class="profile-nav-btn" onclick="switchTab('orders',this)">
+              <i class="fa-solid fa-bag-shopping"></i> My Orders
+            </button>
+            <button class="profile-nav-btn" onclick="switchTab('reservations',this)">
+              <i class="fa-regular fa-calendar-check"></i> Reservations
+            </button>
+            <button class="profile-nav-btn" onclick="switchTab('favourites',this)">
+              <i class="fa-solid fa-heart"></i> Favourites
+            </button>
+            <div class="profile-nav-sep"></div>
+            <button class="profile-nav-btn" onclick="switchTab('settings',this)">
+              <i class="fa-solid fa-gear"></i> Settings
+            </button>
+            <button class="profile-nav-btn" onclick="Auth.logout()" style="color:#e74c3c">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+          </nav>
+        </aside>
+
+        <!-- Main panel -->
+        <div>
+
+          <!-- OVERVIEW -->
+          <div class="profile-tab active" id="tab-overview">
+            <h3 style="margin-bottom:1.5rem;font-size:1.5rem">Welcome back, <span id="ov-name"
+                style="color:var(--accent)"></span>!</h3>
+
+            <div class="stats-row">
+              <div class="stat-box fade-up">
+                <div class="stat-box-num" id="ov-orders">0</div>
+                <div class="stat-box-lbl">Total Orders</div>
+              </div>
+              <div class="stat-box fade-up">
+                <div class="stat-box-num" id="ov-spent">$0</div>
+                <div class="stat-box-lbl">Total Spent</div>
+              </div>
+              <div class="stat-box fade-up">
+                <div class="stat-box-num" id="ov-reservations">0</div>
+                <div class="stat-box-lbl">Reservations</div>
+              </div>
+            </div>
+
+            <!-- Recent orders -->
+            <h4 style="margin-bottom:1rem;font-size:1.1rem"><i class="fa-solid fa-clock-rotate-left"
+                style="color:var(--accent);margin-right:8px"></i>Recent Orders</h4>
+            <div id="ov-recent-orders"></div>
+
+            <!-- Quick actions -->
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:2rem">
+              <a href="menu.html" class="btn btn-primary btn-block" style="justify-content:center">
+                <i class="fa-solid fa-utensils"></i> Order Now
+              </a>
+              <a href="reservation.html" class="btn btn-outline btn-block" style="justify-content:center">
+                <i class="fa-regular fa-calendar"></i> Reserve Table
+              </a>
+            </div>
+          </div>
+
+          <!-- ORDERS -->
+          <div class="profile-tab" id="tab-orders">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+              <h3 style="font-size:1.5rem">My Orders</h3>
+              <a href="menu.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> New Order</a>
+            </div>
+            <div id="orders-list"></div>
+          </div>
+
+          <!-- RESERVATIONS -->
+          <div class="profile-tab" id="tab-reservations">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+              <h3 style="font-size:1.5rem">My Reservations</h3>
+              <a href="reservation.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> New Booking</a>
+            </div>
+            <div id="reservations-list"></div>
+          </div>
+
+          <!-- FAVOURITES -->
+          <div class="profile-tab" id="tab-favourites">
+            <h3 style="font-size:1.5rem;margin-bottom:1.5rem">My Favourite Foods</h3>
+            <div id="fav-content"></div>
+          </div>
+
+          <!-- SETTINGS -->
+          <div class="profile-tab" id="tab-settings">
+            <h3 style="font-size:1.5rem;margin-bottom:1.5rem">Account Settings</h3>
+
+            <div class="settings-card">
+              <h4><i class="fa-solid fa-user" style="color:var(--accent)"></i> Personal Information</h4>
+              <form id="settings-form" novalidate>
+                <div class="frow">
+                  <div class="fgroup">
+                    <label for="s-name">Full Name</label>
+                    <input type="text" id="s-name" placeholder="Your name">
+                    <span class="ferr" id="s-name-e"></span>
+                  </div>
+                  <div class="fgroup">
+                    <label for="s-phone">Phone</label>
+                    <input type="tel" id="s-phone" placeholder="+1 555 000 0000">
+                    <span class="ferr" id="s-phone-e"></span>
+                  </div>
+                </div>
+                <div class="fgroup">
+                  <label for="s-email">Email Address</label>
+                  <input type="email" id="s-email" placeholder="your@email.com">
+                  <span class="ferr" id="s-email-e"></span>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save
+                  Changes</button>
+              </form>
+            </div>
+
+            <div class="settings-card">
+              <h4><i class="fa-solid fa-moon" style="color:var(--accent)"></i> Appearance</h4>
+              <div
+                style="display:flex;align-items:center;justify-content:space-between;padding:1rem;background:var(--bg2);border-radius:10px;border:1px solid var(--border)">
+                <div>
+                  <div style="font-weight:600;font-size:.9rem">Dark Mode</div>
+                  <div style="font-size:.78rem;color:var(--muted)">Switch between light and dark theme</div>
+                </div>
+                <button class="theme-toggle" style="flex-shrink:0"></button>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <h4><i class="fa-solid fa-trash" style="color:#e74c3c"></i> Danger Zone</h4>
+              <div style="display:flex;gap:1rem;flex-wrap:wrap">
+                <button class="btn btn-outline btn-sm" onclick="clearOrders()"
+                  style="border-color:#e74c3c;color:#e74c3c">
+                  <i class="fa-solid fa-trash"></i> Clear Order History
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="Auth.logout()"
+                  style="border-color:#e74c3c;color:#e74c3c">
+                  <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <button id="btt" aria-label="Back to top"><i class="fa-solid fa-chevron-up"></i></button>
+  <script src="js/global.js"></script>
+  <script>
+    function switchTab(name, btn) {
+      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.profile-nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      if (btn) btn.classList.add('active');
+      initFadeUp();
+    }
+
+    function renderOrders(containerId, limit) {
+      const orders = Orders.get();
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      if (!orders.length) {
+        el.innerHTML = `<div class="no-orders"><i class="fa-solid fa-bag-shopping"></i><p>No orders yet.</p><a href="menu.html" class="btn btn-primary btn-sm" style="margin-top:1rem">Order Now</a></div>`;
+        return;
+      }
+      const list = limit ? orders.slice(0, limit) : orders;
+      const statuses = ['delivered', 'delivered', 'preparing', 'placed'];
+      el.innerHTML = list.map((order, i) => {
+        const status = order.status || statuses[i % statuses.length];
+        const itemNames = (order.items || []).map(it => it.name).slice(0, 3);
+        const extraCount = (order.items || []).length - 3;
+        return `<div class="order-card fade-up">
+      <div class="order-head">
+        <div>
+          <div class="order-id">${order.id || 'ORD-' + (i + 1)}</div>
+          <div class="order-date"><i class="fa-regular fa-clock" style="margin-right:4px"></i>${order.date ? new Date(order.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recently'}</div>
+        </div>
+        <span class="order-status ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+      </div>
+      <div class="order-items-row">
+        ${itemNames.map(n => `<span class="order-item-chip">${n}</span>`).join('')}
+        ${extraCount > 0 ? `<span class="order-item-chip">+${extraCount} more</span>` : ''}
+      </div>
+      <div class="order-total-row">
+        <span style="font-size:.8rem;color:var(--muted)">${(order.items || []).length} item${(order.items || []).length !== 1 ? 's' : ''} · ${order.delivery === 0 ? 'Pick Up' : 'Delivery'}</span>
+        <span class="order-total">$${(+order.total || 0).toFixed(2)}</span>
+      </div>
+    </div>`;
+      }).join('');
+      initFadeUp();
+    }
+
+    function renderReservations() {
+      const list = JSON.parse(localStorage.getItem('br_reservations') || '[]');
+      const el = document.getElementById('reservations-list');
+      if (!el) return;
+      if (!list.length) {
+        el.innerHTML = `<div class="no-orders"><i class="fa-regular fa-calendar"></i><p>No reservations yet.</p><a href="reservation.html" class="btn btn-primary btn-sm" style="margin-top:1rem">Book a Table</a></div>`;
+        return;
+      }
+      el.innerHTML = list.map(r => `
+    <div class="res-card fade-up">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem">
+        <div>
+          <div class="res-date-big">${new Date(r.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+          <div style="font-size:.78rem;color:var(--muted)">${new Date(r.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric' })}</div>
+        </div>
+        <span class="badge badge-green"><i class="fa-solid fa-check"></i> Confirmed</span>
+      </div>
+      <div class="res-row">
+        <div class="res-detail"><i class="fa-regular fa-clock"></i>${r.time}</div>
+        <div class="res-detail"><i class="fa-solid fa-users"></i>${r.guests} guests</div>
+        <div class="res-detail"><i class="fa-solid fa-chair"></i>${r.section}</div>
+        ${r.occasion && r.occasion !== 'none' ? `<div class="res-detail"><i class="fa-solid fa-champagne-glasses"></i>${r.occasion}</div>` : ''}
+      </div>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:.5rem">Booking ID: ${r.id}</div>
+    </div>
+  `).join('');
+      initFadeUp();
+    }
+
+    function renderFavourites() {
+      const user = Auth.get();
+      const el = document.getElementById('fav-content');
+      if (!el) return;
+      const prefs = user.prefs || [];
+      if (!prefs.length) {
+        el.innerHTML = `<p style="color:var(--muted)">No food preferences set. <a href="profile.html#settings">Update your profile</a> to add favourites.</p>`;
+        return;
+      }
+      const menu = JSON.parse(localStorage.getItem('br_menu') || '[]');
+      const favItems = menu.filter(item => prefs.includes(item.cat)).slice(0, 6);
+      el.innerHTML = `
+    <div style="margin-bottom:1.5rem">
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem">Your favourite categories:</p>
+      <div class="fav-grid">${prefs.map(p => `<span class="fav-chip">🍽 ${p.charAt(0).toUpperCase() + p.slice(1)}</span>`).join('')}</div>
+    </div>
+    <h4 style="margin-bottom:1rem;font-size:1rem">Recommended for You</h4>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+      ${favItems.map(item => `
+        <div class="food-card">
+          <div class="food-card-img"><span class="bg-letter">${item.name[0]}</span><span style="position:relative;z-index:1;font-size:3rem">${item.emoji}</span></div>
+          <div class="food-card-body">
+            <h4 class="food-card-name" style="font-size:.95rem">${item.name}</h4>
+            <div class="food-card-footer">
+              <span class="food-price">$${item.price}</span>
+              <button class="btn btn-primary btn-sm" onclick="Cart.add(${JSON.stringify({ id: item.id, name: item.name, emoji: item.emoji, price: item.price, desc: item.desc, cat: item.cat }).replace(/"/g, '&quot;')})">Add</button>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+      initFadeUp();
+    }
+
+    function clearOrders() {
+      if (!confirm('Clear all order history?')) return;
+      localStorage.removeItem('br_orders');
+      renderOrders('orders-list');
+      renderOrders('ov-recent-orders', 2);
+      toast('Order history cleared.', 'info');
+    }
+
+    function loadSettings() {
+      const user = Auth.get();
+      if (!user) return;
+      if (document.getElementById('s-name')) document.getElementById('s-name').value = user.name || '';
+      if (document.getElementById('s-email')) document.getElementById('s-email').value = user.email || '';
+      if (document.getElementById('s-phone')) document.getElementById('s-phone').value = user.phone || '';
+    }
+
+    function initSettings() {
+      const form = document.getElementById('settings-form');
+      if (!form) return;
+      const fields = { 's-name': [V.required, V.name], 's-email': [V.required, V.email], 's-phone': [V.phone] };
+      setupLiveValidation(fields, form);
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        let ok = true;
+        Object.keys(fields).forEach(id => { if (!validateField(id, fields[id], form)) ok = false; });
+        if (!ok) { toast('Please fix errors.', 'bad'); return; }
+        const user = Auth.get() || {};
+        user.name = document.getElementById('s-name').value.trim();
+        user.email = document.getElementById('s-email').value.trim();
+        user.phone = document.getElementById('s-phone').value.trim();
+        Auth.save(user);
+        Auth.updateNav();
+        document.getElementById('p-name').textContent = user.name;
+        document.getElementById('p-email').textContent = user.email;
+        document.getElementById('ov-name').textContent = user.name.split(' ')[0];
+        toast('✅ Profile updated!', 'ok');
+      });
+    }
+
+    // Init
+    const user = Auth.get();
+    if (!user) {
+      document.getElementById('not-logged-in').style.display = 'block';
+    } else {
+      document.getElementById('profile-content').style.display = 'grid';
+
+      // Fill header
+      document.getElementById('p-avatar').textContent = (user.name || 'U')[0].toUpperCase();
+      document.getElementById('p-name').textContent = user.name || 'User';
+      document.getElementById('p-email').textContent = user.email || '';
+      document.getElementById('ov-name').textContent = (user.name || 'there').split(' ')[0];
+      if (user.createdAt) document.getElementById('p-joined').textContent = 'Member since ' + new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      // Stats
+      const orders = Orders.get();
+      const reservations = JSON.parse(localStorage.getItem('br_reservations') || '[]');
+      const totalSpent = orders.reduce((s, o) => s + (+o.total || 0), 0);
+      document.getElementById('ov-orders').textContent = orders.length;
+      document.getElementById('ov-spent').textContent = '$' + totalSpent.toFixed(0);
+      document.getElementById('ov-reservations').textContent = reservations.length;
+
+      renderOrders('ov-recent-orders', 2);
+      renderOrders('orders-list');
+      renderReservations();
+      renderFavourites();
+      loadSettings();
+      initSettings();
+    }
+  </script>
+</body>
+
+</html>

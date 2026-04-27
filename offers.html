@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bistro Royale — Special Offers</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .offer-filter {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      justify-content: center
+    }
+
+    .offer-filter button {
+      padding: 10px 20px;
+      border-radius: 99px;
+      border: 1.5px solid var(--border2);
+      background: transparent;
+      color: var(--text2);
+      font-family: 'Poppins', sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .25s
+    }
+
+    .offer-filter button:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .offer-filter button.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent)
+    }
+
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem
+    }
+
+    .offer-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all .35s;
+      animation: fadeInUp .4s both;
+      position: relative
+    }
+
+    .offer-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent)
+    }
+
+    .offer-card.hot::before {
+      content: '🔥 HOT';
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: var(--accent);
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      padding: 5px 11px;
+      border-radius: 99px;
+      z-index: 5
+    }
+
+    .offer-img {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden
+    }
+
+    .offer-img .bg-ltr {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-size: 9rem;
+      font-weight: 900;
+      opacity: .06;
+      color: var(--accent)
+    }
+
+    .offer-discount {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: var(--gold);
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow)
+    }
+
+    .offer-body {
+      padding: 1.4rem
+    }
+
+    .offer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: .3rem
+    }
+
+    .offer-desc {
+      font-size: .82rem;
+      margin-bottom: .8rem
+    }
+
+    .offer-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-bottom: 1rem
+    }
+
+    .offer-items span {
+      font-size: .7rem;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      padding: 3px 9px;
+      border-radius: 99px;
+      color: var(--text2)
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: 1rem
+    }
+
+    .old-p {
+      text-decoration: line-through;
+      color: var(--muted);
+      font-size: 1rem
+    }
+
+    .new-p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent)
+    }
+
+    .save-badge {
+      background: rgba(39, 174, 96, .12);
+      color: #27ae60;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: .72rem;
+      font-weight: 700
+    }
+
+    /* Countdown */
+    .countdown {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: .8rem;
+      margin-bottom: 1rem
+    }
+
+    .countdown-label {
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: .5rem
+    }
+
+    .countdown-timer {
+      display: flex;
+      gap: .4rem;
+      align-items: center;
+      justify-content: center
+    }
+
+    .cdown-block {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: .4rem .6rem;
+      text-align: center;
+      min-width: 44px
+    }
+
+    .cdown-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      display: block
+    }
+
+    .cdown-lbl {
+      font-size: .55rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em
+    }
+
+    .cdown-sep {
+      color: var(--accent);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 14px
+    }
+
+    .offer-card.expired .countdown {
+      border-color: #e74c3c
+    }
+
+    .offer-card.expired .cdown-num {
+      color: #e74c3c
+    }
+
+    .expired-badge {
+      background: #e74c3c;
+      color: #fff;
+      text-align: center;
+      padding: .5rem;
+      font-size: .75rem;
+      font-weight: 700;
+      display: none
+    }
+
+    .offer-card.expired .expired-badge {
+      display: block
+    }
+
+    /* Banner */
+    .promo-banner {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 16px;
+      padding: 2.5rem;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      overflow: hidden
+    }
+
+    .promo-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+    }
+
+    .promo-banner h2 {
+      color: #fff;
+      margin-bottom: .5rem
+    }
+
+    .promo-banner p {
+      color: rgba(255, 255, 255, .85);
+      margin-bottom: 1.2rem
+    }
+
+    .promo-code-box {
+      display: inline-flex;
+      align-items: center;
+      gap: .8rem;
+      background: rgba(255, 255, 255, .15);
+      border: 2px dashed rgba(255, 255, 255, .5);
+      border-radius: 10px;
+      padding: .8rem 1.5rem
+    }
+
+    .promo-code {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: .2em;
+      color: #fff
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, .2);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, .35)
+    }
+
+    @media(max-width:900px) {
+      .offers-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(max-width:560px) {
+      .offers-grid {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Bistro<span>Royale</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="offers.html" class="active">Offers</a></li>
+        <li><a href="reservation.html">Reserve</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="theme-toggle"></button>
+        <a href="cart.html" class="cart-btn"><i class="fa-solid fa-cart-shopping"></i><span
+            class="cart-count">0</span></a>
+        <a href="login.html" class="btn btn-primary btn-sm nav-login-btn"><i class="fa-solid fa-right-to-bracket"></i>
+          Login</a>
+        <a href="profile.html" class="btn btn-outline btn-sm nav-profile-btn"
+          style="display:none;align-items:center;gap:6px">
+          <i class="fa-solid fa-circle-user"></i><span class="nav-user-name"></span>
+        </a>
+        <button class="ham" id="ham"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+  <nav class="mob-nav" id="mob-nav">
+    <a href="index.html">🏠 Home</a><a href="menu.html">🍽 Menu</a><a href="offers.html">🎁 Offers</a><a
+      href="cart.html">🛒 Cart</a>
+    <a href="profile.html" class="nav-profile-btn" style="display:none">👤 Profile</a>
+    <a href="login.html" class="nav-login-btn">🔑 Login</a>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Limited Time</p>
+      <h1>Special <em style="font-style:italic;color:var(--accent)">Offers</em></h1>
+      <p>Exclusive deals and combo bundles — save big while they last!</p>
+    </div>
+  </div>
+
+  <main class="section">
+    <div class="container">
+
+      <!-- Promo Banner -->
+      <div class="promo-banner">
+        <h2>🎉 Use Code at Checkout</h2>
+        <p>Get 10% off your entire order — limited time only!</p>
+        <div class="promo-code-box">
+          <span class="promo-code">BISTRO10</span>
+          <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="offer-filter">
+        <button class="active" data-cat="all">All Offers</button>
+        <button data-cat="combo">🍽 Combos</button>
+        <button data-cat="single">🥗 Single Dish</button>
+        <button data-cat="family">👨‍👩‍👧 Family</button>
+        <button data-cat="drinks">🥤 Drinks</button>
+        <button data-cat="desserts">🍰 Desserts</button>
+      </div>
+
+      <div class="offers-grid" id="offers-grid"></div>
+    </div>
+  </main>
+
+  <button id="btt" aria-label="Back to top"><i class="fa-solid fa-chevron-up"></i></button>
+  <script src="js/global.js"></script>
+  <script>
+    // Offers data — each has an end time (hours from now)
+    const now = Date.now();
+    const h = 3600000;
+    const OFFERS = [
+      { id: 1, name: 'Weekend Family Feast', emoji: '🍖', desc: 'Mixed grill platter, 2 sides, 4 drinks, family dessert', cat: 'family', items: ['Mixed Grill', 'Coleslaw', 'Fries', '4 Lemonades', 'Baklava x4'], oldPrice: 89.99, newPrice: 59.99, discount: 33, hot: true, endsIn: now + 5 * h },
+      { id: 2, name: 'Lunch Express', emoji: '🍝', desc: 'Any pasta + drink + dessert — ready in 15 min', cat: 'combo', items: ['Any Pasta', 'Soft Drink', 'Mango Sorbet'], oldPrice: 28.99, newPrice: 19.99, discount: 31, hot: false, endsIn: now + 2 * h },
+      { id: 3, name: 'Burger & Fries Deal', emoji: '🍔', desc: 'Wagyu beef burger, loaded fries, milkshake', cat: 'combo', items: ['Wagyu Burger', 'Truffle Fries', 'Rose Milkshake'], oldPrice: 26.99, newPrice: 18.99, discount: 30, hot: true, endsIn: now + 8 * h },
+      { id: 4, name: 'Fresh Juice Bundle x4', emoji: '🍊', desc: 'Four fresh-squeezed juices of your choice', cat: 'drinks', items: ['4× Fresh Juices'], oldPrice: 19.99, newPrice: 12.99, discount: 35, hot: false, endsIn: now + 24 * h },
+      { id: 5, name: 'Sweet Tooth Box', emoji: '🍫', desc: 'Chocolate lava cake, crème brûlée, baklava & sorbet', cat: 'desserts', items: ['Lava Cake', 'Crème Brûlée', 'Baklava', 'Mango Sorbet'], oldPrice: 36.99, newPrice: 24.99, discount: 32, hot: false, endsIn: now + 12 * h },
+      { id: 6, name: 'Surf & Turf Duo', emoji: '🦞', desc: 'Grilled salmon & ribeye steak for two, with sides', cat: 'single', items: ['Grilled Salmon', 'Ribeye Steak', '2 Sides'], oldPrice: 64.99, newPrice: 44.99, discount: 31, hot: true, endsIn: now + 6 * h },
+      { id: 7, name: 'Vegan Wellness Pack', emoji: '🥗', desc: 'Veggie curry, garden salad, green smoothie & sorbet', cat: 'family', items: ['Veggie Curry', 'Caesar Salad', 'Green Smoothie', 'Mango Sorbet'], oldPrice: 42.99, newPrice: 28.99, discount: 33, hot: false, endsIn: now + 48 * h },
+      { id: 8, name: 'Happy Hour Drinks', emoji: '🥤', desc: 'Any 2 smoothies or juices — happy hour special', cat: 'drinks', items: ['2× Smoothie/Juice'], oldPrice: 13.98, newPrice: 8.99, discount: 36, hot: false, endsIn: now + 3 * h },
+      { id: 9, name: 'Chef\'s Tasting Plate', emoji: '🍽', desc: '5-item tasting plate — chef chooses the best of today', cat: 'single', items: ['5 Chef Selections'], oldPrice: 49.99, newPrice: 32.99, discount: 34, hot: true, endsIn: now + 1 * h },
+    ];
+
+    const timers = {};
+
+    function formatTime(ms) {
+      if (ms <= 0) return { h: '00', m: '00', s: '00', expired: true };
+      const s = Math.floor(ms / 1000);
+      return {
+        h: String(Math.floor(s / 3600)).padStart(2, '0'),
+        m: String(Math.floor((s % 3600) / 60)).padStart(2, '0'),
+        s: String(s % 60).padStart(2, '0'),
+        expired: false
+      };
+    }
+
+    function renderCountdown(offerId, endsIn) {
+      const remaining = endsIn - Date.now();
+      const t = formatTime(remaining);
+      const card = document.querySelector(`[data-offer="${offerId}"]`);
+      if (!card) return;
+      const hn = card.querySelector('.h-num');
+      const mn = card.querySelector('.m-num');
+      const sn = card.querySelector('.s-num');
+      if (hn) hn.textContent = t.h;
+      if (mn) mn.textContent = t.m;
+      if (sn) sn.textContent = t.s;
+      if (t.expired) {
+        card.classList.add('expired');
+        clearInterval(timers[offerId]);
+      }
+    }
+
+    function startTimers() {
+      OFFERS.forEach(o => {
+        renderCountdown(o.id, o.endsIn);
+        timers[o.id] = setInterval(() => renderCountdown(o.id, o.endsIn), 1000);
+      });
+    }
+
+    function renderOffers(cat) {
+      const grid = document.getElementById('offers-grid');
+      const filtered = cat === 'all' ? OFFERS : OFFERS.filter(o => o.cat === cat);
+
+      // Clear old timers
+      Object.keys(timers).forEach(k => clearInterval(timers[k]));
+
+      grid.innerHTML = filtered.map((o, i) => `
+    <article class="offer-card ${o.hot ? 'hot' : ''}" data-offer="${o.id}" data-cat="${o.cat}" style="animation-delay:${i * 70}ms">
+      <div class="offer-img">
+        <span class="bg-ltr">${o.name[0]}</span>
+        <span style="position:relative;z-index:1">${o.emoji}</span>
+        <div class="offer-discount">-${o.discount}%</div>
+      </div>
+
+      <div class="expired-badge">⏰ OFFER EXPIRED</div>
+
+      <div class="offer-body">
+        <h4 class="offer-name">${o.name}</h4>
+        <p class="offer-desc">${o.desc}</p>
+        <div class="offer-items">
+          ${o.items.map(it => `<span>${it}</span>`).join('')}
+        </div>
+        <div class="price-row">
+          <span class="old-p">$${o.oldPrice}</span>
+          <span class="new-p">$${o.newPrice}</span>
+          <span class="save-badge">Save $${(o.oldPrice - o.newPrice).toFixed(2)}</span>
+        </div>
+        <div class="countdown">
+          <div class="countdown-label"><i class="fa-regular fa-clock"></i> Offer ends in</div>
+          <div class="countdown-timer">
+            <div class="cdown-block"><span class="cdown-num h-num">00</span><span class="cdown-lbl">Hours</span></div>
+            <span class="cdown-sep">:</span>
+            <div class="cdown-block"><span class="cdown-num m-num">00</span><span class="cdown-lbl">Min</span></div>
+            <span class="cdown-sep">:</span>
+            <div class="cdown-block"><span class="cdown-num s-num">00</span><span class="cdown-lbl">Sec</span></div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="grabOffer(${o.id})" style="padding:12px">
+          <i class="fa-solid fa-bolt"></i> Grab This Deal — $${o.newPrice}
+        </button>
+      </div>
+    </article>
+  `).join('');
+
+      startTimers();
+      initFadeUp();
+    }
+
+    function grabOffer(id) {
+      const offer = OFFERS.find(o => o.id === id);
+      if (!offer) return;
+      const card = document.querySelector(`[data-offer="${id}"]`);
+      if (card && card.classList.contains('expired')) { toast('This offer has expired!', 'bad'); return; }
+      Cart.add({ id: 'offer-' + offer.id, name: offer.name, emoji: offer.emoji, price: offer.newPrice, desc: offer.desc, cat: 'offer', qty: 1 });
+      toast(`🎉 ${offer.name} added! Save $${(offer.oldPrice - offer.newPrice).toFixed(2)}`, 'ok');
+    }
+
+    function copyCode() {
+      navigator.clipboard?.writeText('BISTRO10').catch(() => { });
+      toast('✅ Code BISTRO10 copied to clipboard!', 'ok');
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.offer-filter button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.offer-filter button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderOffers(btn.dataset.cat);
+      });
+    });
+
+    renderOffers('all');
+  </script>
+</body>
+
+</html>

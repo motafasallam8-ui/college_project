@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bistro Royale — Menu</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .filter-bar {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      justify-content: center
+    }
+
+    .filter-btn {
+      padding: 10px 22px;
+      border-radius: 99px;
+      border: 1.5px solid var(--border2);
+      background: transparent;
+      color: var(--text2);
+      font-family: 'Poppins', sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      cursor: pointer;
+      transition: all .25s
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent)
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem
+    }
+
+    @media(max-width:900px) {
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(max-width:560px) {
+      .menu-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .food-card {
+      transition: all .35s ease
+    }
+
+    .food-card.hidden {
+      display: none
+    }
+
+    .food-card.show {
+      animation: fadeInUp .4s both
+    }
+
+    .search-box {
+      display: flex;
+      max-width: 400px;
+      margin: 0 auto 2rem;
+      border: 1.5px solid var(--border2);
+      border-radius: 99px;
+      overflow: hidden;
+      background: var(--input)
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 11px 18px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: .88rem;
+      outline: none
+    }
+
+    .search-box button {
+      padding: 11px 18px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem
+    }
+
+    .cat-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin: 3rem 0 1.5rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--border2);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: .8rem
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 4rem;
+      color: var(--muted);
+      font-size: 1.1rem;
+      display: none
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Bistro<span>Royale</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html" class="active">Menu</a></li>
+        <li><a href="offers.html">Offers</a></li>
+        <li><a href="reservation.html">Reserve</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="theme-toggle" aria-label="Toggle theme"></button>
+        <a href="cart.html" class="cart-btn"><i class="fa-solid fa-cart-shopping"></i><span
+            class="cart-count">0</span></a>
+        <a href="login.html" class="btn btn-primary btn-sm nav-login-btn"><i class="fa-solid fa-right-to-bracket"></i>
+          Login</a>
+        <a href="profile.html" class="btn btn-outline btn-sm nav-profile-btn"
+          style="display:none;align-items:center;gap:6px">
+          <i class="fa-solid fa-circle-user"></i><span class="nav-user-name"></span>
+        </a>
+        <button class="ham" id="ham"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+  <nav class="mob-nav" id="mob-nav">
+    <a href="index.html">🏠 Home</a><a href="menu.html">🍽 Menu</a><a href="cart.html">🛒 Cart</a>
+    <a href="profile.html" class="nav-profile-btn" style="display:none">👤 Profile</a>
+    <a href="login.html" class="nav-login-btn">🔑 Login</a><a href="login.html">👤 Login</a>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Our Dishes</p>
+      <h1>The Full <em style="font-style:italic;color:var(--accent)">Menu</em></h1>
+      <p>From hearty mains to sweet treats and refreshing drinks — find your favourite.</p>
+    </div>
+  </div>
+
+  <main class="section">
+    <div class="container">
+      <!-- Search -->
+      <div class="search-box">
+        <input type="text" id="search" placeholder="Search dishes...">
+        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="filter-bar">
+        <button class="filter-btn active" data-cat="all"><i class="fa-solid fa-border-all"></i> All</button>
+        <button class="filter-btn" data-cat="starters"><i class="fa-solid fa-leaf"></i> Starters</button>
+        <button class="filter-btn" data-cat="mains"><i class="fa-solid fa-drumstick-bite"></i> Main Courses</button>
+        <button class="filter-btn" data-cat="grills"><i class="fa-solid fa-fire"></i> Grills</button>
+        <button class="filter-btn" data-cat="seafood"><i class="fa-solid fa-fish"></i> Seafood</button>
+        <button class="filter-btn" data-cat="pasta"><i class="fa-solid fa-wheat-awn"></i> Pasta</button>
+        <button class="filter-btn" data-cat="desserts"><i class="fa-solid fa-cake-candles"></i> Desserts</button>
+        <button class="filter-btn" data-cat="drinks"><i class="fa-solid fa-glass-water"></i> Drinks</button>
+      </div>
+
+      <div class="menu-grid" id="menu-grid"></div>
+      <div class="no-results" id="no-results">😕 No dishes found. Try another search.</div>
+    </div>
+  </main>
+
+  <button id="btt" aria-label="Back to top"><i class="fa-solid fa-chevron-up"></i></button>
+  <script src="js/global.js"></script>
+  <script>
+    const MENU_ITEMS = [
+      // Starters
+      { id: 101, name: 'Bruschetta', emoji: '🥖', desc: 'Toasted sourdough, fresh tomato, basil, olive oil', price: 7.99, cat: 'starters' },
+      { id: 102, name: 'Soup of the Day', emoji: '🍲', desc: 'Freshly made daily with seasonal veg', price: 5.99, cat: 'starters' },
+      { id: 103, name: 'Garlic Mushrooms', emoji: '🍄', desc: 'Sautéed in butter, thyme, on toasted bread', price: 8.99, cat: 'starters' },
+      { id: 104, name: 'Caesar Salad', emoji: '🥗', desc: 'Romaine, croutons, Parmesan, Caesar dressing', price: 9.99, cat: 'starters' },
+      // Mains
+      { id: 201, name: 'Grilled Chicken', emoji: '🍗', desc: 'Herb-marinated breast, roast potatoes, veg', price: 16.99, cat: 'mains' },
+      { id: 202, name: 'Beef Burger', emoji: '🍔', desc: 'Wagyu beef, brioche bun, truffle mayo, fries', price: 15.99, cat: 'mains', discount: 10 },
+      { id: 203, name: 'Lamb Tagine', emoji: '🫕', desc: 'Slow-cooked lamb, apricots, couscous, harissa', price: 19.99, cat: 'mains' },
+      { id: 204, name: 'Veggie Curry', emoji: '🍛', desc: 'Seasonal veg in aromatic coconut sauce', price: 13.99, cat: 'mains' },
+      // Grills
+      { id: 301, name: 'Ribeye Steak', emoji: '🥩', desc: '300g USDA ribeye, chimichurri, grilled veg', price: 34.99, cat: 'grills' },
+      { id: 302, name: 'Mixed Grill Platter', emoji: '🍖', desc: 'Chicken, lamb, kofta, grilled tomato, bread', price: 28.99, cat: 'grills' },
+      { id: 303, name: 'BBQ Ribs', emoji: '🦴', desc: 'Fall-off-the-bone ribs, smoky BBQ sauce, coleslaw', price: 24.99, cat: 'grills', discount: 15 },
+      // Seafood
+      { id: 401, name: 'Grilled Salmon', emoji: '🐟', desc: 'Atlantic salmon fillet, lemon butter, capers', price: 22.99, cat: 'seafood' },
+      { id: 402, name: 'Prawn Linguine', emoji: '🦐', desc: 'King prawns, white wine, cherry tomato, chilli', price: 21.99, cat: 'seafood' },
+      { id: 403, name: 'Fish & Chips', emoji: '🐠', desc: 'Beer-battered cod, thick-cut chips, tartare sauce', price: 14.99, cat: 'seafood' },
+      // Pasta
+      { id: 501, name: 'Spaghetti Bolognese', emoji: '🍝', desc: 'Slow-cooked beef ragu, fresh pasta, Parmesan', price: 14.99, cat: 'pasta' },
+      { id: 502, name: 'Truffle Pappardelle', emoji: '🍜', desc: 'Black truffle, cream, wild mushrooms, Pecorino', price: 19.99, cat: 'pasta' },
+      { id: 503, name: 'Penne Arrabbiata', emoji: '🌶', desc: 'Spicy tomato sauce, chilli, garlic, basil', price: 12.99, cat: 'pasta' },
+      // Desserts
+      { id: 601, name: 'Chocolate Lava Cake', emoji: '🍫', desc: 'Warm Belgian chocolate, vanilla ice cream', price: 9.99, cat: 'desserts' },
+      { id: 602, name: 'Crème Brûlée', emoji: '🍮', desc: 'Vanilla custard, caramelised sugar crust', price: 8.99, cat: 'desserts' },
+      { id: 603, name: 'Mango Sorbet', emoji: '🍨', desc: 'Fresh mango, coconut milk, mint', price: 6.99, cat: 'desserts' },
+      { id: 604, name: 'Baklava', emoji: '🧁', desc: 'Layered filo, pistachio, honey syrup', price: 7.99, cat: 'desserts' },
+      // Drinks
+      { id: 701, name: 'Fresh Orange Juice', emoji: '🍊', desc: 'Freshly squeezed, no added sugar', price: 4.99, cat: 'drinks' },
+      { id: 702, name: 'Mango Smoothie', emoji: '🥭', desc: 'Mango, yoghurt, honey, fresh mint', price: 6.99, cat: 'drinks' },
+      { id: 703, name: 'Lemonade', emoji: '🍋', desc: 'House-made, sparkling water, fresh mint', price: 4.49, cat: 'drinks' },
+      { id: 704, name: 'Arabic Coffee', emoji: '☕', desc: 'Cardamom coffee, dates on the side', price: 3.99, cat: 'drinks' },
+      { id: 705, name: 'Rose Milkshake', emoji: '🌹', desc: 'Rosewater, milk, ice cream, rose petals', price: 6.49, cat: 'drinks' },
+    ];
+
+    let current = 'all';
+
+    function renderMenu(items) {
+      const grid = document.getElementById('menu-grid');
+      const noRes = document.getElementById('no-results');
+      if (!items.length) { grid.innerHTML = ''; noRes.style.display = 'block'; return; }
+      noRes.style.display = 'none';
+      grid.innerHTML = items.map((item, i) => {
+        const disc = item.discount ? (item.price * (1 - item.discount / 100)).toFixed(2) : null;
+        return `<article class="food-card show fade-up" data-cat="${item.cat}" style="animation-delay:${i * 50}ms">
+      <div class="food-card-img">
+        <span class="bg-letter">${item.name[0]}</span>
+        <span style="position:relative;z-index:1;font-size:4.5rem">${item.emoji}</span>
+        ${item.discount ? `<span class="badge badge-red" style="position:absolute;top:10px;right:10px">-${item.discount}%</span>` : ''}
+      </div>
+      <div class="food-card-body">
+        <span class="tag">${item.cat}</span>
+        <h4 class="food-card-name" style="margin-top:.5rem">${item.name}</h4>
+        <p class="food-card-desc">${item.desc}</p>
+        <div class="food-card-footer">
+          <div>
+            ${item.discount ? `<span class="food-old-price">$${item.price}</span>` : ''}
+            <span class="food-price">$${disc || item.price}</span>
+          </div>
+          <div style="display:flex;gap:.5rem">
+            <a href="food-details.html?id=${item.id}" class="btn btn-outline btn-sm"><i class="fa-solid fa-eye"></i></a>
+            <button class="btn btn-primary btn-sm" onclick='addItem(${JSON.stringify(item)})'>
+              <i class="fa-solid fa-cart-plus"></i> Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>`;
+      }).join('');
+      initFadeUp();
+    }
+
+    function filterMenu(cat, search = '') {
+      current = cat;
+      let items = cat === 'all' ? MENU_ITEMS : MENU_ITEMS.filter(i => i.cat === cat);
+      if (search) items = items.filter(i => i.name.toLowerCase().includes(search.toLowerCase()) || i.desc.toLowerCase().includes(search.toLowerCase()));
+      renderMenu(items);
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterMenu(btn.dataset.cat, document.getElementById('search').value);
+      });
+    });
+
+    // Search
+    document.getElementById('search').addEventListener('input', e => {
+      filterMenu(current, e.target.value);
+    });
+
+    function addItem(item) {
+      const price = item.discount ? +(item.price * (1 - item.discount / 100)).toFixed(2) : item.price;
+      Cart.add({ ...item, price });
+    }
+
+    // Save menu to localStorage for cart/details
+    localStorage.setItem('bistro_menu', JSON.stringify(MENU_ITEMS));
+    filterMenu('all');
+  </script>
+</body>
+
+</html>

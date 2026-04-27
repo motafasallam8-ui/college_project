@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bistro Royale — Food Details</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .detail-section {
+      padding: 100px 0 60px
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .82rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      flex-wrap: wrap
+    }
+
+    .breadcrumb a {
+      color: var(--muted);
+      transition: color .2s
+    }
+
+    .breadcrumb a:hover {
+      color: var(--accent)
+    }
+
+    .detail-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start
+    }
+
+    .detail-img-box {
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: fadeInUp .5s both
+    }
+
+    .detail-img-box .bg-letter {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-size: 16rem;
+      font-weight: 900;
+      opacity: .05;
+      color: var(--accent);
+      user-select: none;
+      pointer-events: none
+    }
+
+    .detail-main-emoji {
+      position: relative;
+      z-index: 1;
+      animation: float 3s ease-in-out infinite;
+      font-size: clamp(5rem, 12vw, 9rem)
+    }
+
+    .disc-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: var(--accent);
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: .78rem;
+      font-weight: 800;
+      z-index: 5
+    }
+
+    .chef-badge {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      z-index: 5
+    }
+
+    .detail-content {
+      animation: fadeInUp .5s .15s both
+    }
+
+    .detail-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      margin: .6rem 0;
+      line-height: 1.15
+    }
+
+    .detail-desc {
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+      line-height: 1.75
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap
+    }
+
+    .stars {
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 1px
+    }
+
+    .rating-num {
+      font-weight: 700;
+      font-size: .95rem
+    }
+
+    .rating-count {
+      font-size: .78rem;
+      color: var(--muted)
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap
+    }
+
+    .price-old {
+      font-size: 1.2rem;
+      color: var(--muted);
+      text-decoration: line-through
+    }
+
+    .price-new {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1
+    }
+
+    .price-save {
+      background: rgba(39, 174, 96, .12);
+      color: #27ae60;
+      font-size: .75rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 99px
+    }
+
+    .detail-divider {
+      border: none;
+      border-top: 1px solid var(--border2);
+      margin: 1.4rem 0
+    }
+
+    .section-label {
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--text2);
+      margin-bottom: .8rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem
+    }
+
+    .ingr-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 1.4rem
+    }
+
+    .ingr-chip {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: .8rem;
+      font-weight: 500;
+      transition: all .2s;
+      cursor: default
+    }
+
+    .ingr-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .order-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: .8rem;
+      flex-wrap: wrap
+    }
+
+    .qty-box {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--bg2);
+      border: 1.5px solid var(--border2);
+      border-radius: 10px;
+      padding: .3rem
+    }
+
+    .qty-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .qty-btn:hover {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .qty-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      min-width: 32px;
+      text-align: center
+    }
+
+    .add-btn {
+      flex: 1;
+      min-width: 160px;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: .9rem;
+      justify-content: center;
+      transition: all .3s
+    }
+
+    .add-btn.added {
+      background: #27ae60 !important;
+      animation: pulse .4s ease
+    }
+
+    .subtotal-line {
+      font-size: .85rem;
+      color: var(--muted)
+    }
+
+    .subtotal-line strong {
+      color: var(--accent);
+      font-size: 1rem
+    }
+
+    .nutri-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      margin-top: 1.5rem
+    }
+
+    .nutri-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .7rem
+    }
+
+    .nutri-item {
+      text-align: center;
+      background: var(--bg2);
+      border-radius: 10px;
+      padding: .8rem .5rem;
+      border: 1px solid var(--border)
+    }
+
+    .nutri-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      line-height: 1
+    }
+
+    .nutri-lbl {
+      font-size: .65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-top: .3rem;
+      display: block
+    }
+
+    .similar-section {
+      margin-top: 70px
+    }
+
+    .similar-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem
+    }
+
+    .similar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem
+    }
+
+    .detail-loading {
+      text-align: center;
+      padding: 6rem 2rem;
+      color: var(--muted)
+    }
+
+    .spin-icon {
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      font-size: 2.5rem
+    }
+
+    @media(max-width:900px) {
+      .detail-wrap {
+        grid-template-columns: 1fr;
+        gap: 2rem
+      }
+
+      .detail-section {
+        padding: 85px 0 40px
+      }
+    }
+
+    @media(max-width:768px) {
+      .similar-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .nutri-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .order-row {
+        flex-direction: column;
+        align-items: stretch
+      }
+
+      .qty-box {
+        justify-content: center
+      }
+
+      .add-btn {
+        width: 100%
+      }
+    }
+
+    @media(max-width:480px) {
+      .similar-grid {
+        grid-template-columns: 1fr
+      }
+
+      .price-new {
+        font-size: 2rem
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Bistro<span>Royale</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html" class="active">Menu</a></li>
+        <li><a href="offers.html">Offers</a></li>
+        <li><a href="reservation.html">Reserve</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="theme-toggle" aria-label="Toggle theme"></button>
+        <a href="cart.html" class="cart-btn" aria-label="Cart">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-count" style="display:none">0</span>
+        </a>
+        <a href="login.html" class="btn btn-primary btn-sm nav-login-btn">
+          <i class="fa-solid fa-right-to-bracket"></i> Login
+        </a>
+        <a href="profile.html" class="btn btn-outline btn-sm nav-profile-btn"
+          style="display:none;align-items:center;gap:6px">
+          <i class="fa-solid fa-circle-user"></i>
+          <span class="nav-user-name"></span>
+        </a>
+        <button class="ham" id="ham" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="mob-nav" id="mob-nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="menu.html">🍽 Menu</a>
+    <a href="offers.html">🎁 Offers</a>
+    <a href="reservation.html">📅 Reserve</a>
+    <a href="about.html">ℹ️ About</a>
+    <a href="contact.html">📞 Contact</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="profile.html" class="nav-profile-btn" style="display:none">👤 Profile</a>
+    <a href="login.html" class="nav-login-btn">🔑 Login</a>
+  </nav>
+
+  <main class="detail-section">
+    <div class="container">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <span>›</span>
+        <a href="menu.html">Menu</a>
+        <span>›</span>
+        <span id="bc-name" style="color:var(--accent)">Loading…</span>
+      </nav>
+
+      <div id="detail-root">
+        <div class="detail-loading">
+          <div class="spin-icon">🍽</div>
+          <p style="margin-top:1rem">Loading dish…</p>
+        </div>
+      </div>
+
+      <div class="similar-section" id="similar-sec" style="display:none">
+        <h3>You Might Also Like</h3>
+        <div class="similar-grid" id="similar-grid"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <button id="btt" aria-label="Back to top"><i class="fa-solid fa-chevron-up"></i></button>
+  <script src="js/global.js"></script>
+  <script>
+    let qty = 1;
+
+    function getMenu() {
+      if (typeof MENU_DATA !== 'undefined') return MENU_DATA;
+      return JSON.parse(localStorage.getItem('br_menu') || '[]');
+    }
+
+    function renderStars(r) {
+      let s = '';
+      for (let i = 1; i <= 5; i++) s += i <= Math.floor(r) ? '★' : (i - r < 1 && i - r > 0 ? '½' : '☆');
+      return s;
+    }
+
+    function renderDetail(item) {
+      document.title = item.name + ' — Bistro Royale';
+      document.getElementById('bc-name').textContent = item.name;
+
+      const disc = item.discount ? +(item.price * (1 - item.discount / 100)).toFixed(2) : null;
+      const final = disc !== null ? disc : item.price;
+      const save = disc !== null ? (item.price - disc).toFixed(2) : null;
+
+      document.getElementById('detail-root').innerHTML = `
+    <div class="detail-wrap">
+
+      <div class="detail-img-box">
+        <span class="bg-letter">${item.name[0]}</span>
+        <span class="detail-main-emoji">${item.emoji}</span>
+        ${item.discount ? `<div class="disc-badge">🔥 ${item.discount}% OFF</div>` : ''}
+        <div class="chef-badge">
+          <span class="badge badge-gold"><i class="fa-solid fa-award"></i> Chef's Pick</span>
+        </div>
+      </div>
+
+      <div class="detail-content">
+        <span class="tag">${item.cat}</span>
+        <h1 class="detail-title">${item.name}</h1>
+        <p class="detail-desc">${item.desc}</p>
+
+        <div class="rating-row">
+          <span class="stars">${renderStars(item.rating)}</span>
+          <span class="rating-num">${item.rating}</span>
+          <span class="rating-count">(${item.reviews.toLocaleString()} reviews)</span>
+        </div>
+
+        <div class="price-row">
+          ${disc !== null ? `<span class="price-old">$${item.price.toFixed(2)}</span>` : ''}
+          <span class="price-new">$${final.toFixed(2)}</span>
+          ${save ? `<span class="price-save">Save $${save}</span>` : ''}
+        </div>
+
+        <hr class="detail-divider">
+
+        <div class="section-label">
+          <i class="fa-solid fa-list" style="color:var(--accent)"></i> Ingredients
+        </div>
+        <div class="ingr-list">
+          ${(item.ingredients || []).map(ing => `<span class="ingr-chip">${ing}</span>`).join('')}
+        </div>
+
+        <hr class="detail-divider">
+
+        <div class="section-label">
+          <i class="fa-solid fa-basket-shopping" style="color:var(--accent)"></i> Add to Order
+        </div>
+
+        <div class="order-row">
+          <div class="qty-box">
+            <button class="qty-btn" id="btn-minus" aria-label="Decrease quantity">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <span class="qty-num" id="qty-disp">1</span>
+            <button class="qty-btn" id="btn-plus" aria-label="Increase quantity">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <button class="btn btn-primary add-btn" id="add-btn">
+            <i class="fa-solid fa-cart-plus"></i> Add to Cart
+          </button>
+        </div>
+        <div class="subtotal-line">
+          Total: <strong id="subtotal-val">$${final.toFixed(2)}</strong>
+        </div>
+
+        <div class="nutri-box">
+          <div class="section-label" style="margin-bottom:.8rem">
+            <i class="fa-solid fa-chart-pie" style="color:var(--accent)"></i> Nutrition per Serving
+          </div>
+          <div class="nutri-grid">
+            <div class="nutri-item"><span class="nutri-val">${item.calories}</span><span class="nutri-lbl">Calories</span></div>
+            <div class="nutri-item"><span class="nutri-val">${item.protein}</span><span class="nutri-lbl">Protein</span></div>
+            <div class="nutri-item"><span class="nutri-val">${item.carbs}</span><span class="nutri-lbl">Carbs</span></div>
+            <div class="nutri-item"><span class="nutri-val">${item.fat}</span><span class="nutri-lbl">Fat</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>`;
+
+      // Qty logic
+      const priceNum = parseFloat(final);
+      qty = 1;
+
+      document.getElementById('btn-minus').addEventListener('click', () => {
+        if (qty > 1) { qty--; document.getElementById('qty-disp').textContent = qty; document.getElementById('subtotal-val').textContent = '$' + (priceNum * qty).toFixed(2); }
+      });
+      document.getElementById('btn-plus').addEventListener('click', () => {
+        if (qty < 20) { qty++; document.getElementById('qty-disp').textContent = qty; document.getElementById('subtotal-val').textContent = '$' + (priceNum * qty).toFixed(2); }
+      });
+
+      // Add to cart
+      document.getElementById('add-btn').addEventListener('click', () => {
+        const cartItems = Cart.get();
+        const existing = cartItems.find(i => i.id === item.id);
+        if (existing) {
+          existing.qty = (existing.qty || 1) + qty;
+          Cart.save(cartItems);
+        } else {
+          const newItems = [...cartItems, { id: item.id, name: item.name, emoji: item.emoji, price: priceNum, desc: item.desc, cat: item.cat, qty }];
+          Cart.save(newItems);
+        }
+        toast(`🛒 ${item.name} ×${qty} added to cart!`, 'ok');
+
+        const btn = document.getElementById('add-btn');
+        btn.classList.add('added');
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Added!';
+        setTimeout(() => { btn.classList.remove('added'); btn.innerHTML = '<i class="fa-solid fa-cart-plus"></i> Add to Cart'; }, 1800);
+      });
+
+      // Similar dishes
+      const all = getMenu();
+      const similar = all.filter(m => m.cat === item.cat && m.id !== item.id).slice(0, 4);
+      if (similar.length) {
+        document.getElementById('similar-sec').style.display = 'block';
+        document.getElementById('similar-grid').innerHTML = similar.map(s => {
+          const sd = s.discount ? +(s.price * (1 - s.discount / 100)).toFixed(2) : null;
+          return `<article class="food-card">
+        <div class="food-card-img">
+          <span class="bg-letter">${s.name[0]}</span>
+          <span style="position:relative;z-index:1;font-size:3.2rem">${s.emoji}</span>
+          ${s.discount ? `<span class="badge badge-red" style="position:absolute;top:8px;right:8px">-${s.discount}%</span>` : ''}
+        </div>
+        <div class="food-card-body">
+          <h4 class="food-card-name" style="font-size:.92rem">${s.name}</h4>
+          <p class="food-card-desc">${s.desc}</p>
+          <div class="food-card-footer">
+            <span class="food-price">$${(sd || s.price).toFixed(2)}</span>
+            <div style="display:flex;gap:.4rem">
+              <a href="food-details.html?id=${s.id}" class="btn btn-outline btn-sm" title="View details">
+                <i class="fa-solid fa-eye"></i>
+              </a>
+              <button class="btn btn-primary btn-sm" onclick="quickAdd(${s.id})">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>`;
+        }).join('');
+      }
+
+      initFadeUp();
+    }
+
+    function quickAdd(id) {
+      const item = getMenu().find(m => m.id === id);
+      if (!item) return;
+      const price = item.discount ? +(item.price * (1 - item.discount / 100)).toFixed(2) : item.price;
+      const cartItems = Cart.get();
+      const ex = cartItems.find(i => i.id === id);
+      if (ex) { ex.qty = (ex.qty || 1) + 1; Cart.save(cartItems); toast('🛒 ' + item.name + ' added!', 'ok'); }
+      else { Cart.save([...cartItems, { id: item.id, name: item.name, emoji: item.emoji, price, desc: item.desc, cat: item.cat, qty: 1 }]); toast('🛒 ' + item.name + ' added!', 'ok'); }
+    }
+
+    // ── Boot ──────────────────────────────────────────
+    const idParam = parseInt(new URLSearchParams(location.search).get('id'));
+    const menu = getMenu();
+    const item = menu.find(m => m.id === idParam) || menu[0];
+
+    if (!item) {
+      document.getElementById('detail-root').innerHTML = `<div class="detail-loading"><div style="font-size:3rem">😕</div><p>Dish not found.</p><a href="menu.html" class="btn btn-primary" style="margin-top:1.5rem">Back to Menu</a></div>`;
+    } else {
+      renderDetail(item);
+    }
+  </script>
+</body>
+
+</html>

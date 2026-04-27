@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bistro Royale — Reserve a Table</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .res-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 3rem;
+      align-items: start
+    }
+
+    /* Info side */
+    .res-info {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden
+    }
+
+    .res-info-header {
+      background: var(--accent);
+      padding: 2rem;
+      color: #fff
+    }
+
+    .res-info-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #fff;
+      margin-bottom: .4rem
+    }
+
+    .res-info-header p {
+      color: rgba(255, 255, 255, .8);
+      font-size: .85rem
+    }
+
+    .res-info-body {
+      padding: 1.8rem
+    }
+
+    .res-rule {
+      display: flex;
+      gap: .9rem;
+      align-items: flex-start;
+      padding: .9rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: .7rem;
+      transition: border-color .2s
+    }
+
+    .res-rule:hover {
+      border-color: var(--accent)
+    }
+
+    .res-rule-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .res-rule-title {
+      font-weight: 600;
+      font-size: .88rem;
+      margin-bottom: 2px
+    }
+
+    .res-rule-desc {
+      font-size: .78rem;
+      color: var(--text2)
+    }
+
+    /* Table selector */
+    .table-selector {
+      margin: 1.5rem 0
+    }
+
+    .table-selector h4 {
+      font-size: .9rem;
+      margin-bottom: .9rem
+    }
+
+    .table-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .6rem
+    }
+
+    .table-opt {
+      border: 2px solid var(--border2);
+      border-radius: 10px;
+      padding: .9rem .5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none
+    }
+
+    .table-opt:hover {
+      border-color: var(--accent)
+    }
+
+    .table-opt.selected {
+      background: var(--badge);
+      border-color: var(--accent)
+    }
+
+    .table-opt .t-icon {
+      font-size: 1.6rem;
+      margin-bottom: .3rem;
+      display: block
+    }
+
+    .table-opt .t-name {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text2)
+    }
+
+    .table-opt.selected .t-name {
+      color: var(--accent)
+    }
+
+    /* Form */
+    .res-form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem
+    }
+
+    .res-form-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: .3rem
+    }
+
+    .res-form-card>p {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-bottom: 2rem
+    }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .5rem;
+      margin-top: .6rem
+    }
+
+    .time-slot {
+      border: 1.5px solid var(--border2);
+      border-radius: 8px;
+      padding: .6rem .3rem;
+      text-align: center;
+      cursor: pointer;
+      font-size: .78rem;
+      font-weight: 600;
+      transition: all .2s;
+      color: var(--text2)
+    }
+
+    .time-slot:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .time-slot.selected {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent)
+    }
+
+    .time-slot.unavailable {
+      opacity: .35;
+      cursor: not-allowed;
+      text-decoration: line-through
+    }
+
+    /* Date info bar */
+    .date-info {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: .8rem 1rem;
+      margin-top: .5rem;
+      font-size: .8rem;
+      display: none
+    }
+
+    .date-info.show {
+      display: flex;
+      align-items: center;
+      gap: .6rem
+    }
+
+    .date-ok {
+      color: #27ae60
+    }
+
+    .date-bad {
+      color: #e74c3c
+    }
+
+    /* Progress steps */
+    .steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2.5rem
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      position: relative
+    }
+
+    .step::after {
+      content: '';
+      position: absolute;
+      top: 14px;
+      right: -50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border2);
+      z-index: 0
+    }
+
+    .step:last-child::after {
+      display: none
+    }
+
+    .step-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--border2);
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto .4rem;
+      position: relative;
+      z-index: 1;
+      transition: all .3s
+    }
+
+    .step.done .step-circle {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .step.active .step-circle {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 0 4px var(--badge)
+    }
+
+    .step-label {
+      font-size: .65rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em
+    }
+
+    .step.done .step-label,
+    .step.active .step-label {
+      color: var(--accent)
+    }
+
+    /* Success */
+    .res-success {
+      display: none;
+      text-align: center;
+      padding: 2.5rem 1rem
+    }
+
+    .res-success.show {
+      display: block
+    }
+
+    .res-success .succ-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: float 2s ease-in-out infinite
+    }
+
+    .conf-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: left
+    }
+
+    .conf-row {
+      display: flex;
+      justify-content: space-between;
+      padding: .5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .87rem
+    }
+
+    .conf-row:last-child {
+      border-bottom: none
+    }
+
+    .conf-label {
+      color: var(--muted)
+    }
+
+    .conf-val {
+      font-weight: 600
+    }
+
+    .guests-visual {
+      display: flex;
+      gap: .3rem;
+      flex-wrap: wrap;
+      margin-top: .5rem
+    }
+
+    .guest-dot {
+      width: 28px;
+      height: 28px;
+      background: var(--badge);
+      border: 1px solid var(--border2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .9rem
+    }
+
+    @media(max-width:900px) {
+      .res-layout {
+        grid-template-columns: 1fr
+      }
+
+      .table-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .time-grid {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
+
+    @media(max-width:480px) {
+      .time-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Bistro<span>Royale</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="offers.html">Offers</a></li>
+        <li><a href="reservation.html" class="active">Reserve</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="theme-toggle"></button>
+        <a href="cart.html" class="cart-btn"><i class="fa-solid fa-cart-shopping"></i><span
+            class="cart-count">0</span></a>
+        <a href="login.html" class="btn btn-primary btn-sm nav-login-btn"><i class="fa-solid fa-right-to-bracket"></i>
+          Login</a>
+        <a href="profile.html" class="btn btn-outline btn-sm nav-profile-btn"
+          style="display:none;align-items:center;gap:6px">
+          <i class="fa-solid fa-circle-user"></i><span class="nav-user-name"></span>
+        </a>
+        <button class="ham" id="ham"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+  <nav class="mob-nav" id="mob-nav">
+    <a href="index.html">🏠 Home</a><a href="menu.html">🍽 Menu</a><a href="cart.html">🛒 Cart</a>
+    <a href="profile.html" class="nav-profile-btn" style="display:none">👤 Profile</a>
+    <a href="login.html" class="nav-login-btn">🔑 Login</a>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Book Your Spot</p>
+      <h1>Reserve a <em style="font-style:italic;color:var(--accent)">Table</em></h1>
+      <p>Secure your table in seconds — we look forward to welcoming you!</p>
+    </div>
+  </div>
+
+  <main class="section">
+    <div class="container">
+      <div class="res-layout">
+
+        <!-- Info side -->
+        <aside class="fade-up">
+          <div class="res-info">
+            <div class="res-info-header">
+              <h3>Table Booking</h3>
+              <p>Reserve your perfect spot for an unforgettable meal.</p>
+            </div>
+            <div class="res-info-body">
+
+              <!-- Rules -->
+              <div class="res-rule"><span class="res-rule-icon">📅</span>
+                <div>
+                  <div class="res-rule-title">Advance Booking</div>
+                  <div class="res-rule-desc">Reserve up to 30 days in advance. Same-day bookings welcome based on
+                    availability.</div>
+                </div>
+              </div>
+              <div class="res-rule"><span class="res-rule-icon">⏰</span>
+                <div>
+                  <div class="res-rule-title">Cancellation Policy</div>
+                  <div class="res-rule-desc">Cancel at least 2 hours before your reservation — no penalty.</div>
+                </div>
+              </div>
+              <div class="res-rule"><span class="res-rule-icon">👨‍👩‍👧</span>
+                <div>
+                  <div class="res-rule-title">Group Bookings</div>
+                  <div class="res-rule-desc">For 10+ guests, please call us directly for private dining arrangements.
+                  </div>
+                </div>
+              </div>
+              <div class="res-rule"><span class="res-rule-icon">🌿</span>
+                <div>
+                  <div class="res-rule-title">Dietary Needs</div>
+                  <div class="res-rule-desc">Note any dietary requirements in the special requests field.</div>
+                </div>
+              </div>
+
+              <!-- Section selector -->
+              <div class="table-selector">
+                <h4><i class="fa-solid fa-chair" style="color:var(--accent);margin-right:6px"></i>Preferred Section</h4>
+                <div class="table-grid">
+                  <div class="table-opt selected" data-section="Main Hall" onclick="selectSection(this)"><span
+                      class="t-icon">🏛</span><span class="t-name">Main Hall</span></div>
+                  <div class="table-opt" data-section="Garden" onclick="selectSection(this)"><span
+                      class="t-icon">🌿</span><span class="t-name">Garden</span></div>
+                  <div class="table-opt" data-section="Private" onclick="selectSection(this)"><span
+                      class="t-icon">🕯</span><span class="t-name">Private</span></div>
+                  <div class="table-opt" data-section="Bar" onclick="selectSection(this)"><span
+                      class="t-icon">🍷</span><span class="t-name">Wine Bar</span></div>
+                  <div class="table-opt" data-section="Terrace" onclick="selectSection(this)"><span
+                      class="t-icon">☀️</span><span class="t-name">Terrace</span></div>
+                  <div class="table-opt" data-section="Chef Table" onclick="selectSection(this)"><span
+                      class="t-icon">👨‍🍳</span><span class="t-name">Chef's Table</span></div>
+                </div>
+              </div>
+
+              <!-- Reservations count -->
+              <div
+                style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center;margin-top:1rem">
+                <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--accent)"
+                  id="res-count">0</div>
+                <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">
+                  Reservations Made Today</div>
+              </div>
+
+            </div>
+          </div>
+        </aside>
+
+        <!-- Form -->
+        <div class="res-form-card fade-up">
+
+          <!-- Steps -->
+          <div class="steps">
+            <div class="step active" id="step1">
+              <div class="step-circle">1</div>
+              <div class="step-label">Details</div>
+            </div>
+            <div class="step" id="step2">
+              <div class="step-circle">2</div>
+              <div class="step-label">Time</div>
+            </div>
+            <div class="step" id="step3">
+              <div class="step-circle">3</div>
+              <div class="step-label">Confirm</div>
+            </div>
+          </div>
+
+          <!-- Success card -->
+          <div class="res-success" id="res-success">
+            <span class="succ-icon">🎉</span>
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:.5rem">Table Reserved!</h3>
+            <p style="color:var(--muted);margin-bottom:1rem">We'll send a confirmation to your email. We can't wait to
+              see you!</p>
+            <div class="conf-card" id="conf-card"></div>
+            <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
+              <button class="btn btn-outline" onclick="newReservation()"><i class="fa-solid fa-plus"></i> New
+                Booking</button>
+              <a href="menu.html" class="btn btn-primary"><i class="fa-solid fa-utensils"></i> Browse Menu</a>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <div id="form-wrap">
+            <h3>Book Your Table</h3>
+            <p>All fields validated with JavaScript — no past dates allowed.</p>
+
+            <form id="res-form" novalidate>
+              <div class="frow">
+                <div class="fgroup">
+                  <label for="rf-name"><i class="fa-solid fa-user"></i> Full Name</label>
+                  <input type="text" id="rf-name" placeholder="John Doe" autocomplete="name">
+                  <span class="ferr" id="rf-name-e"></span>
+                </div>
+                <div class="fgroup">
+                  <label for="rf-phone"><i class="fa-solid fa-phone"></i> Phone Number</label>
+                  <input type="tel" id="rf-phone" placeholder="+1 555 000 0000" autocomplete="tel">
+                  <span class="ferr" id="rf-phone-e"></span>
+                </div>
+              </div>
+
+              <div class="fgroup">
+                <label for="rf-email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                <input type="email" id="rf-email" placeholder="your@email.com" autocomplete="email">
+                <span class="ferr" id="rf-email-e"></span>
+              </div>
+
+              <div class="frow">
+                <div class="fgroup">
+                  <label for="rf-guests"><i class="fa-solid fa-users"></i> Number of Guests</label>
+                  <select id="rf-guests">
+                    <option value="">— Select guests —</option>
+                    <option value="1">1 Person</option>
+                    <option value="2">2 People</option>
+                    <option value="3">3 People</option>
+                    <option value="4">4 People</option>
+                    <option value="5">5 People</option>
+                    <option value="6">6 People</option>
+                    <option value="7">7 People</option>
+                    <option value="8">8 People</option>
+                    <option value="10">10 People</option>
+                  </select>
+                  <span class="ferr" id="rf-guests-e"></span>
+                </div>
+                <div class="fgroup">
+                  <label for="rf-occasion"><i class="fa-solid fa-champagne-glasses"></i> Occasion</label>
+                  <select id="rf-occasion">
+                    <option value="none">None</option>
+                    <option value="Birthday">🎂 Birthday</option>
+                    <option value="Anniversary">💑 Anniversary</option>
+                    <option value="Business">💼 Business Dinner</option>
+                    <option value="Date">❤️ Romantic Date</option>
+                    <option value="Family">👨‍👩‍👧 Family Gathering</option>
+                    <option value="Other">🎉 Other Celebration</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Date — JS validates no past dates -->
+              <div class="fgroup">
+                <label for="rf-date"><i class="fa-regular fa-calendar"></i> Preferred Date</label>
+                <input type="date" id="rf-date">
+                <div class="date-info" id="date-info">
+                  <span id="date-info-icon"></span>
+                  <span id="date-info-text"></span>
+                </div>
+                <span class="ferr" id="rf-date-e"></span>
+              </div>
+
+              <!-- Time slots -->
+              <div class="fgroup">
+                <label><i class="fa-regular fa-clock"></i> Preferred Time</label>
+                <div class="time-grid" id="time-grid">
+                  <div class="time-slot unavailable">11:00</div>
+                  <div class="time-slot" onclick="selectTime(this)">12:00</div>
+                  <div class="time-slot" onclick="selectTime(this)">12:30</div>
+                  <div class="time-slot" onclick="selectTime(this)">13:00</div>
+                  <div class="time-slot unavailable">13:30</div>
+                  <div class="time-slot" onclick="selectTime(this)">14:00</div>
+                  <div class="time-slot" onclick="selectTime(this)">19:00</div>
+                  <div class="time-slot" onclick="selectTime(this)">19:30</div>
+                  <div class="time-slot" onclick="selectTime(this)">20:00</div>
+                  <div class="time-slot unavailable">20:30</div>
+                  <div class="time-slot" onclick="selectTime(this)">21:00</div>
+                  <div class="time-slot" onclick="selectTime(this)">21:30</div>
+                </div>
+                <span class="ferr" id="rf-time-e"></span>
+              </div>
+
+              <div class="fgroup">
+                <label for="rf-notes"><i class="fa-regular fa-comment"></i> Special Requests (optional)</label>
+                <textarea id="rf-notes" rows="3"
+                  placeholder="Allergies, high chair needed, window seat preference..."></textarea>
+              </div>
+
+              <div style="display:flex;align-items:flex-start;gap:.7rem;margin-bottom:1.5rem">
+                <input type="checkbox" id="rf-agree" style="margin-top:3px;accent-color:var(--accent)">
+                <label for="rf-agree" style="font-size:.83rem;color:var(--text2);cursor:pointer">
+                  I agree to the <a href="#" style="color:var(--accent)">cancellation policy</a>
+                  — cancellations must be made at least 2 hours before the reservation time.
+                </label>
+              </div>
+              <span class="ferr" id="rf-agree-e"></span>
+
+              <button type="submit" class="btn btn-primary btn-block" id="res-btn" style="padding:15px">
+                <i class="fa-regular fa-calendar-check"></i> Confirm Reservation
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <button id="btt" aria-label="Back to top"><i class="fa-solid fa-chevron-up"></i></button>
+  <script src="js/global.js"></script>
+  <script>
+    let selectedTime = '';
+    let selectedSection = 'Main Hall';
+
+    function selectTime(el) {
+      if (el.classList.contains('unavailable')) return;
+      document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedTime = el.textContent.trim();
+      document.getElementById('rf-time-e').classList.remove('show');
+      // Update step
+      document.getElementById('step2').classList.add('done');
+    }
+
+    function selectSection(el) {
+      document.querySelectorAll('.table-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedSection = el.dataset.section;
+    }
+
+    // Date validation — JS only, no HTML5 required
+    document.getElementById('rf-date').addEventListener('change', e => {
+      const val = e.target.value;
+      const info = document.getElementById('date-info');
+      const icon = document.getElementById('date-info-icon');
+      const text = document.getElementById('date-info-text');
+      const errEl = document.getElementById('rf-date-e');
+
+      if (!val) { info.classList.remove('show'); return; }
+
+      const chosen = new Date(val);
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const maxDate = new Date(); maxDate.setDate(maxDate.getDate() + 30);
+
+      info.classList.add('show');
+
+      if (chosen < today) {
+        info.className = 'date-info show date-bad';
+        icon.textContent = '❌';
+        text.textContent = 'You cannot select a past date!';
+        e.target.classList.add('err');
+        errEl.textContent = 'Date cannot be in the past.';
+        errEl.classList.add('show');
+      } else if (chosen > maxDate) {
+        info.className = 'date-info show date-bad';
+        icon.textContent = '⚠️';
+        text.textContent = 'We only accept bookings up to 30 days in advance.';
+        e.target.classList.add('err');
+        errEl.textContent = 'Maximum 30 days in advance.';
+        errEl.classList.add('show');
+      } else {
+        const day = chosen.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        const isWeekend = chosen.getDay() === 0 || chosen.getDay() === 6;
+        info.className = 'date-info show date-ok';
+        icon.textContent = '✅';
+        text.textContent = `${day}${isWeekend ? ' — Weekend, book early!' : ' — Great choice!'}`;
+        e.target.classList.remove('err');
+        e.target.classList.add('ok');
+        errEl.classList.remove('show');
+        document.getElementById('step1').classList.add('done');
+        document.getElementById('step2').classList.add('active');
+      }
+    });
+
+    // Set min date to today (JS, not HTML5 min attribute for validation)
+    const dateInput = document.getElementById('rf-date');
+    const todayStr = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', todayStr); // UI helper only — JS validates
+
+    // Form fields
+    const fields = {
+      'rf-name': [V.required, V.name],
+      'rf-phone': [V.required, V.phone],
+      'rf-email': [V.required, V.email],
+      'rf-guests': [V.required, V.guests],
+    };
+    const form = document.getElementById('res-form');
+    setupLiveValidation(fields, form);
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      let ok = true;
+
+      Object.keys(fields).forEach(id => { if (!validateField(id, fields[id], form)) ok = false; });
+
+      // Date validation — JS
+      const dateVal = document.getElementById('rf-date').value;
+      if (!dateVal) {
+        setErr('rf-date', 'Please select a date.');
+        ok = false;
+      } else {
+        const chosen = new Date(dateVal);
+        const today = new Date(); today.setHours(0, 0, 0, 0);
+        if (chosen < today) {
+          setErr('rf-date', 'Date cannot be in the past.');
+          ok = false;
+        }
+      }
+
+      // Time validation — JS
+      if (!selectedTime) {
+        const errEl = document.getElementById('rf-time-e');
+        errEl.textContent = 'Please select a time slot.';
+        errEl.classList.add('show');
+        ok = false;
+      }
+
+      // Checkbox — JS
+      const agreeEl = document.getElementById('rf-agree');
+      if (!agreeEl.checked) {
+        setErr('rf-agree', 'You must agree to the cancellation policy.');
+        ok = false;
+      } else {
+        setOk('rf-agree');
+      }
+
+      if (!ok) { toast('Please fix all errors before confirming.', 'bad'); return; }
+
+      // Build reservation object
+      const reservation = {
+        id: 'RES-' + Date.now(),
+        name: document.getElementById('rf-name').value.trim(),
+        phone: document.getElementById('rf-phone').value.trim(),
+        email: document.getElementById('rf-email').value.trim(),
+        guests: document.getElementById('rf-guests').value,
+        occasion: document.getElementById('rf-occasion').value,
+        date: dateVal,
+        time: selectedTime,
+        section: selectedSection,
+        notes: document.getElementById('rf-notes').value.trim(),
+        bookedAt: new Date().toISOString()
+      };
+
+      // Save to localStorage
+      const saved = JSON.parse(localStorage.getItem('br_reservations') || '[]');
+      saved.push(reservation);
+      localStorage.setItem('br_reservations', JSON.stringify(saved));
+
+      // Update counter
+      document.getElementById('res-count').textContent = saved.length;
+
+      // Loading state
+      const btn = document.getElementById('res-btn');
+      btn.innerHTML = '<i class="fa-solid fa-spinner" style="animation:spin 1s linear infinite"></i> Confirming...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        // Show success
+        document.getElementById('form-wrap').style.display = 'none';
+        document.getElementById('res-success').classList.add('show');
+
+        // Steps complete
+        ['step1', 'step2', 'step3'].forEach(id => {
+          document.getElementById(id).classList.add('done');
+          document.getElementById(id).classList.remove('active');
+        });
+
+        // Build confirmation card
+        const guestNum = parseInt(reservation.guests);
+        const guestIcons = Array.from({ length: Math.min(guestNum, 8) }, () => '<div class="guest-dot">👤</div>').join('');
+
+        document.getElementById('conf-card').innerHTML = `
+      <div class="conf-row"><span class="conf-label">Booking ID</span><span class="conf-val" style="color:var(--accent)">${reservation.id}</span></div>
+      <div class="conf-row"><span class="conf-label">Name</span><span class="conf-val">${reservation.name}</span></div>
+      <div class="conf-row"><span class="conf-label">Date</span><span class="conf-val">${new Date(dateVal + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span></div>
+      <div class="conf-row"><span class="conf-label">Time</span><span class="conf-val">${reservation.time}</span></div>
+      <div class="conf-row"><span class="conf-label">Section</span><span class="conf-val">${reservation.section}</span></div>
+      <div class="conf-row"><span class="conf-label">Guests (${guestNum})</span><span class="conf-val"><div class="guests-visual">${guestIcons}</div></span></div>
+      ${reservation.occasion !== 'none' ? `<div class="conf-row"><span class="conf-label">Occasion</span><span class="conf-val">${reservation.occasion}</span></div>` : ''}
+    `;
+
+        toast('🎉 Table reserved! Confirmation sent.', 'ok');
+      }, 1200);
+    });
+
+    function newReservation() {
+      document.getElementById('form-wrap').style.display = 'block';
+      document.getElementById('res-success').classList.remove('show');
+      form.reset();
+      selectedTime = '';
+      document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+      document.getElementById('date-info').classList.remove('show');
+      document.getElementById('res-btn').disabled = false;
+      document.getElementById('res-btn').innerHTML = '<i class="fa-regular fa-calendar-check"></i> Confirm Reservation';
+      ['step1'].forEach(id => { document.getElementById(id).classList.add('active'); });
+      ['step1', 'step2', 'step3'].forEach(id => document.getElementById(id).classList.remove('done'));
+      Object.keys(fields).forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('err', 'ok'); } });
+    }
+
+    // Load reservation count
+    const saved = JSON.parse(localStorage.getItem('br_reservations') || '[]');
+    document.getElementById('res-count').textContent = saved.length;
+  </script>
+</body>
+
+</html>

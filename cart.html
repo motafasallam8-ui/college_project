@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bistro Royale — Cart</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 2rem;
+      align-items: start
+    }
+
+    .cart-items-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden
+    }
+
+    .cart-head {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .cart-head h3 {
+      font-size: 1.3rem
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 1.2rem;
+      align-items: center;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      transition: background .2s;
+      animation: fadeInUp .3s both
+    }
+
+    .cart-item:last-child {
+      border-bottom: none
+    }
+
+    .cart-item:hover {
+      background: var(--badge)
+    }
+
+    .cart-item-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      border: 1px solid var(--border);
+      flex-shrink: 0
+    }
+
+    .cart-item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .2rem
+    }
+
+    .cart-item-desc {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: .6rem
+    }
+
+    .cart-item-price {
+      font-size: .9rem;
+      color: var(--accent);
+      font-weight: 700
+    }
+
+    .qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: .5rem
+    }
+
+    .qty-ctrl button {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border2);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-size: .9rem;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .qty-ctrl button:hover {
+      border-color: var(--accent);
+      color: var(--accent)
+    }
+
+    .qty-ctrl span {
+      font-weight: 700;
+      min-width: 24px;
+      text-align: center
+    }
+
+    .del-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 6px;
+      border-radius: 6px;
+      transition: all .2s
+    }
+
+    .del-btn:hover {
+      color: #e74c3c;
+      background: rgba(231, 76, 60, .1)
+    }
+
+    .item-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: .6rem
+    }
+
+    .item-total {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text)
+    }
+
+    /* Summary */
+    .summary-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      position: sticky;
+      top: 90px
+    }
+
+    .summary-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: .9rem;
+      font-size: .9rem;
+      color: var(--text2)
+    }
+
+    .summary-row.total {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      border-top: 1px solid var(--border2);
+      padding-top: 1rem;
+      margin-top: .5rem
+    }
+
+    .summary-row.total .price {
+      color: var(--accent);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem
+    }
+
+    .promo-row {
+      display: flex;
+      gap: .6rem;
+      margin: 1.2rem 0
+    }
+
+    .promo-row input {
+      flex: 1;
+      padding: 10px 13px;
+      background: var(--input);
+      border: 1.5px solid var(--border2);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: .85rem;
+      outline: none;
+      transition: border-color .2s
+    }
+
+    .promo-row input:focus {
+      border-color: var(--accent)
+    }
+
+    .promo-row button {
+      padding: 10px 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: .8rem;
+      cursor: pointer;
+      white-space: nowrap
+    }
+
+    .delivery-opts {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      margin: 1.2rem 0
+    }
+
+    .delivery-opt {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      padding: .9rem 1rem;
+      border: 1.5px solid var(--border2);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: .85rem
+    }
+
+    .delivery-opt:hover,
+    .delivery-opt.selected {
+      border-color: var(--accent);
+      background: var(--badge)
+    }
+
+    .delivery-opt input {
+      accent-color: var(--accent)
+    }
+
+    .delivery-label {
+      flex: 1
+    }
+
+    .delivery-price {
+      font-weight: 700;
+      color: var(--accent)
+    }
+
+    /* Empty state */
+    .empty-cart {
+      text-align: center;
+      padding: 5rem 2rem
+    }
+
+    .empty-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+      display: block
+    }
+
+    .empty-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: .5rem
+    }
+
+    /* Checkout btn animation */
+    @keyframes shimmer {
+      0% {
+        background-position: -200% center
+      }
+
+      100% {
+        background-position: 200% center
+      }
+    }
+
+    .checkout-btn {
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+      background-size: 200% auto;
+      animation: shimmer 2s linear infinite
+    }
+
+    .checkout-btn:hover {
+      animation: none;
+      background: var(--accent2)
+    }
+
+    @media(max-width:900px) {
+      .cart-layout {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Bistro<span>Royale</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="offers.html">Offers</a></li>
+        <li><a href="reservation.html">Reserve</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="theme-toggle"></button>
+        <a href="cart.html" class="cart-btn"><i class="fa-solid fa-cart-shopping"></i><span
+            class="cart-count">0</span></a>
+        <a href="login.html" class="btn btn-primary btn-sm nav-login-btn"><i class="fa-solid fa-right-to-bracket"></i>
+          Login</a>
+        <a href="profile.html" class="btn btn-outline btn-sm nav-profile-btn"
+          style="display:none;align-items:center;gap:6px">
+          <i class="fa-solid fa-circle-user"></i><span class="nav-user-name"></span>
+        </a>
+        <button class="ham" id="ham"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+  <nav class="mob-nav" id="mob-nav">
+    <a href="index.html">🏠 Home</a><a href="menu.html">🍽 Menu</a><a href="cart.html">🛒 Cart</a>
+    <a href="profile.html" class="nav-profile-btn" style="display:none">👤 Profile</a>
+    <a href="login.html" class="nav-login-btn">🔑 Login</a>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Your Selection</p>
+      <h1>Your <em style="font-style:italic;color:var(--accent)">Cart</em></h1>
+      <p>Review your items, apply offers, and place your order.</p>
+    </div>
+  </div>
+
+  <main class="section">
+    <div class="container">
+      <div id="cart-content"></div>
+    </div>
+  </main>
+
+  <button id="btt" aria-label="Back to top"><i class="fa-solid fa-chevron-up"></i></button>
+  <script src="js/global.js"></script>
+  <script>
+    let promoApplied = false;
+    let deliveryFee = 2.99;
+
+    function renderCart() {
+      const items = Cart.get();
+      const content = document.getElementById('cart-content');
+
+      if (!items.length) {
+        content.innerHTML = `
+      <div class="empty-cart">
+        <span class="empty-icon">🛒</span>
+        <h2 class="empty-title">Your cart is empty</h2>
+        <p style="color:var(--muted);margin-bottom:2rem">Looks like you haven't added anything yet!</p>
+        <a href="menu.html" class="btn btn-primary"><i class="fa-solid fa-utensils"></i> Browse Menu</a>
+      </div>`;
+        return;
+      }
+
+      const subtotal = Cart.total();
+      const discount = promoApplied ? subtotal * 0.1 : 0;
+      const total = subtotal - discount + deliveryFee;
+
+      content.innerHTML = `
+    <div class="cart-layout">
+      <!-- Items -->
+      <div>
+        <div class="cart-items-wrap">
+          <div class="cart-head">
+            <h3><i class="fa-solid fa-basket-shopping" style="color:var(--accent);margin-right:.5rem"></i>
+              Items (${Cart.count()})
+            </h3>
+            <button class="btn btn-outline btn-sm" onclick="clearAll()">
+              <i class="fa-solid fa-trash"></i> Clear All
+            </button>
+          </div>
+          ${items.map((item, i) => `
+            <div class="cart-item" id="item-${item.id}" style="animation-delay:${i * 60}ms">
+              <div class="cart-item-img">${item.emoji || '🍽'}</div>
+              <div>
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-desc">${item.desc || item.cat}</div>
+                <div class="cart-item-price">$${item.price.toFixed(2)} each</div>
+                <div class="qty-ctrl" style="margin-top:.5rem">
+                  <button onclick="changeQty(${item.id}, ${(item.qty || 1) - 1})" aria-label="Decrease">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  <span id="qty-${item.id}">${item.qty || 1}</span>
+                  <button onclick="changeQty(${item.id}, ${(item.qty || 1) + 1})" aria-label="Increase">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="item-right">
+                <button class="del-btn" onclick="removeItem(${item.id})" aria-label="Remove item">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="item-total">$${(item.price * (item.qty || 1)).toFixed(2)}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Add more -->
+        <div style="margin-top:1.5rem;text-align:center">
+          <a href="menu.html" class="btn btn-outline">
+            <i class="fa-solid fa-plus"></i> Add More Items
+          </a>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-card">
+        <h3><i class="fa-solid fa-receipt" style="color:var(--accent);margin-right:.5rem"></i>Order Summary</h3>
+
+        <!-- Delivery Options -->
+        <p style="font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.6rem">Delivery Type</p>
+        <div class="delivery-opts">
+          <label class="delivery-opt selected" onclick="setDelivery(2.99, this)">
+            <input type="radio" name="delivery" checked>
+            <span class="delivery-label"><strong>Standard Delivery</strong><br><small style="color:var(--muted)">30–45 min</small></span>
+            <span class="delivery-price">$2.99</span>
+          </label>
+          <label class="delivery-opt" onclick="setDelivery(5.99, this)">
+            <input type="radio" name="delivery">
+            <span class="delivery-label"><strong>Express Delivery</strong><br><small style="color:var(--muted)">15–20 min</small></span>
+            <span class="delivery-price">$5.99</span>
+          </label>
+          <label class="delivery-opt" onclick="setDelivery(0, this)">
+            <input type="radio" name="delivery">
+            <span class="delivery-label"><strong>Pick Up</strong><br><small style="color:var(--muted)">Ready in 15 min</small></span>
+            <span class="delivery-price">Free</span>
+          </label>
+        </div>
+
+        <!-- Promo -->
+        <div class="promo-row">
+          <input type="text" id="promo-input" placeholder="Promo code (BISTRO10)">
+          <button onclick="applyPromo()">Apply</button>
+        </div>
+        ${promoApplied ? '<p style="font-size:.75rem;color:#27ae60;margin-top:-8px;margin-bottom:.5rem">✅ 10% discount applied!</p>' : ''}
+
+        <!-- Breakdown -->
+        <div class="summary-row"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+        ${discount > 0 ? `<div class="summary-row" style="color:#27ae60"><span>Promo Discount</span><span>-$${discount.toFixed(2)}</span></div>` : ''}
+        <div class="summary-row"><span>Delivery</span><span>${deliveryFee === 0 ? 'Free' : '$' + deliveryFee.toFixed(2)}</span></div>
+        <div class="summary-row total"><span>Total</span><span class="price">$${total.toFixed(2)}</span></div>
+
+        <button class="btn btn-primary btn-block checkout-btn" style="margin-top:1rem;padding:15px" onclick="checkout()">
+          <i class="fa-solid fa-credit-card"></i> Checkout — $${total.toFixed(2)}
+        </button>
+        <p style="font-size:.72rem;text-align:center;color:var(--muted);margin-top:.8rem">
+          <i class="fa-solid fa-lock"></i> Secure checkout · Cash or card on delivery
+        </p>
+      </div>
+    </div>`;
+    }
+
+    function changeQty(id, newQty) {
+      if (newQty < 1) { removeItem(id); return; }
+      if (newQty > 20) { toast('Max 20 of one item!', 'bad'); return; }
+      Cart.updateQty(id, newQty);
+      renderCart();
+    }
+
+    function removeItem(id) {
+      const el = document.getElementById('item-' + id);
+      if (el) { el.style.opacity = '0'; el.style.transform = 'translateX(30px)'; el.style.transition = 'all .3s'; }
+      setTimeout(() => { Cart.remove(id); renderCart(); }, 300);
+      toast('Item removed from cart', 'info');
+    }
+
+    function clearAll() {
+      if (!confirm('Remove all items from cart?')) return;
+      Cart.clear();
+      renderCart();
+      toast('Cart cleared!', 'info');
+    }
+
+    function setDelivery(fee, el) {
+      deliveryFee = fee;
+      document.querySelectorAll('.delivery-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      renderCart();
+    }
+
+    function applyPromo() {
+      const code = document.getElementById('promo-input')?.value?.trim().toUpperCase();
+      if (code === 'BISTRO10') {
+        promoApplied = true;
+        toast('🎉 Promo code applied! 10% off!', 'ok');
+        renderCart();
+      } else if (!code) {
+        toast('Enter a promo code first.', 'bad');
+      } else {
+        toast(`Code "${code}" is invalid. Try BISTRO10`, 'bad');
+      }
+    }
+
+    function checkout() {
+      const user = Auth.get();
+      if (!user) {
+        toast('Please login to checkout!', 'bad');
+        setTimeout(() => window.location.href = 'login.html', 1200);
+        return;
+      }
+      const subtotal = Cart.total();
+      const discount = promoApplied ? subtotal * 0.1 : 0;
+      const order = {
+        id: 'ORD-' + Date.now(),
+        items: Cart.get(),
+        subtotal: subtotal,
+        discount: discount,
+        delivery: deliveryFee,
+        total: subtotal - discount + deliveryFee,
+        promo: promoApplied,
+        status: 'placed',
+        date: new Date().toISOString(),
+        user: user.email || user.name
+      };
+      Orders.place(order);
+      Cart.clear();
+      toast('🎉 Order placed! ID: ' + order.id, 'ok');
+      setTimeout(() => {
+        if (confirm('Order placed! View your profile to track it?')) window.location.href = 'profile.html';
+        else renderCart();
+      }, 1200);
+    }
+
+    renderCart();
+  </script>
+</body>
+
+</html>

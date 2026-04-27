@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bistro Royale — Contact Us</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 3.5rem;
+      align-items: start
+    }
+
+    .contact-info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden
+    }
+
+    .info-header {
+      background: var(--accent);
+      padding: 2rem;
+      color: #fff
+    }
+
+    .info-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #fff;
+      margin-bottom: .4rem
+    }
+
+    .info-header p {
+      color: rgba(255, 255, 255, .8);
+      font-size: .85rem
+    }
+
+    .info-body {
+      padding: 2rem
+    }
+
+    .info-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: .8rem;
+      transition: border-color .2s
+    }
+
+    .info-item:hover {
+      border-color: var(--accent)
+    }
+
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--badge);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      color: var(--accent)
+    }
+
+    .info-label {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: 3px
+    }
+
+    .info-val {
+      font-size: .9rem;
+      font-weight: 600
+    }
+
+    /* Hours table */
+    .hours-wrap {
+      margin-top: 1.5rem
+    }
+
+    .hours-wrap h4 {
+      font-size: .95rem;
+      margin-bottom: .8rem
+    }
+
+    .hours-table {
+      width: 100%;
+      font-size: .82rem;
+      border-collapse: collapse
+    }
+
+    .hours-table td {
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2)
+    }
+
+    .hours-table td:last-child {
+      text-align: right;
+      font-weight: 600
+    }
+
+    .hours-table tr:last-child td {
+      border-bottom: none
+    }
+
+    .open-row td {
+      color: var(--accent);
+      font-weight: 700
+    }
+
+    .closed-row td {
+      color: var(--muted)
+    }
+
+    /* Form card */
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem
+    }
+
+    .form-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: .4rem
+    }
+
+    .form-card>p {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-bottom: 2rem
+    }
+
+    .success-overlay {
+      display: none;
+      text-align: center;
+      padding: 3rem 1rem
+    }
+
+    .success-overlay.show {
+      display: block
+    }
+
+    .success-overlay .succ-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: pulse 1s 3
+    }
+
+    .success-overlay h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: .5rem
+    }
+
+    .char-count {
+      font-size: .7rem;
+      color: var(--muted);
+      text-align: right;
+      margin-top: 3px
+    }
+
+    @media(max-width:900px) {
+      .contact-layout {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Bistro<span>Royale</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="offers.html">Offers</a></li>
+        <li><a href="reservation.html">Reserve</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="theme-toggle"></button>
+        <a href="cart.html" class="cart-btn"><i class="fa-solid fa-cart-shopping"></i><span
+            class="cart-count">0</span></a>
+        <a href="login.html" class="btn btn-primary btn-sm nav-login-btn"><i class="fa-solid fa-right-to-bracket"></i>
+          Login</a>
+        <a href="profile.html" class="btn btn-outline btn-sm nav-profile-btn"
+          style="display:none;align-items:center;gap:6px">
+          <i class="fa-solid fa-circle-user"></i><span class="nav-user-name"></span>
+        </a>
+        <button class="ham" id="ham"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+  <nav class="mob-nav" id="mob-nav">
+    <a href="index.html">🏠 Home</a><a href="menu.html">🍽 Menu</a><a href="cart.html">🛒 Cart</a>
+    <a href="profile.html" class="nav-profile-btn" style="display:none">👤 Profile</a>
+    <a href="login.html" class="nav-login-btn">🔑 Login</a>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Get in Touch</p>
+      <h1>Contact <em style="font-style:italic;color:var(--accent)">Us</em></h1>
+      <p>We'd love to hear from you — questions, feedback, or reservations.</p>
+    </div>
+  </div>
+
+  <main class="section">
+    <div class="container">
+      <div class="contact-layout">
+
+        <!-- Info Side -->
+        <aside class="fade-up">
+          <div class="contact-info-card">
+            <div class="info-header">
+              <h3>Bistro Royale</h3>
+              <p>We're always happy to help. Reach out any time!</p>
+            </div>
+            <div class="info-body">
+              <div class="info-item">
+                <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+                <div>
+                  <div class="info-label">Address</div>
+                  <div class="info-val">12 Gourmet Street, Paris, France 75001</div>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
+                <div>
+                  <div class="info-label">Phone</div>
+                  <div class="info-val">+33 (0)1 23 45 67 89</div>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon"><i class="fa-regular fa-envelope"></i></div>
+                <div>
+                  <div class="info-label">Email</div>
+                  <div class="info-val">hello@bistroroyale.com</div>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon"><i class="fa-brands fa-instagram"></i></div>
+                <div>
+                  <div class="info-label">Social</div>
+                  <div class="info-val">@bistroroyale</div>
+                </div>
+              </div>
+
+              <!-- Hours -->
+              <div class="hours-wrap">
+                <h4><i class="fa-regular fa-clock" style="color:var(--accent);margin-right:6px"></i>Opening Hours</h4>
+                <table class="hours-table">
+                  <tr class="closed-row">
+                    <td>Monday</td>
+                    <td>Closed</td>
+                  </tr>
+                  <tr>
+                    <td>Tuesday – Thursday</td>
+                    <td>11:00 – 22:00</td>
+                  </tr>
+                  <tr class="open-row">
+                    <td>Friday <span style="font-size:.7rem">(Today ✓)</span></td>
+                    <td>11:00 – 23:30</td>
+                  </tr>
+                  <tr>
+                    <td>Saturday</td>
+                    <td>10:00 – 23:30</td>
+                  </tr>
+                  <tr>
+                    <td>Sunday</td>
+                    <td>10:00 – 21:00</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Social links -->
+              <div style="display:flex;gap:.6rem;margin-top:1.5rem">
+                <a href="#"
+                  style="width:36px;height:36px;border:1px solid var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s"
+                  onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+                  onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'"><i
+                    class="fa-brands fa-instagram"></i></a>
+                <a href="#"
+                  style="width:36px;height:36px;border:1px solid var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s"
+                  onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+                  onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'"><i
+                    class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"
+                  style="width:36px;height:36px;border:1px solid var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s"
+                  onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+                  onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'"><i
+                    class="fa-brands fa-x-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Form Side -->
+        <div class="form-card fade-up">
+          <!-- Success state -->
+          <div class="success-overlay" id="succ">
+            <div class="succ-icon">✅</div>
+            <h3>Message Sent!</h3>
+            <p style="color:var(--muted);margin:.5rem 0 1.5rem">Thank you! We'll get back to you within 24 hours.</p>
+            <button class="btn btn-primary" onclick="resetForm()"><i class="fa-solid fa-rotate-left"></i> Send
+              Another</button>
+          </div>
+
+          <div id="form-wrap">
+            <h3>Send a Message</h3>
+            <p>Fill in the form below and we'll respond within 24 hours.</p>
+
+            <form id="contact-form" novalidate>
+              <div class="frow">
+                <div class="fgroup">
+                  <label for="c-name"><i class="fa-solid fa-user"></i> Your Name</label>
+                  <input type="text" id="c-name" placeholder="John Doe">
+                  <span class="ferr" id="c-name-e"></span>
+                </div>
+                <div class="fgroup">
+                  <label for="c-email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                  <input type="email" id="c-email" placeholder="your@email.com">
+                  <span class="ferr" id="c-email-e"></span>
+                </div>
+              </div>
+              <div class="fgroup">
+                <label for="c-subject"><i class="fa-solid fa-tag"></i> Subject</label>
+                <input type="text" id="c-subject" placeholder="How can we help?">
+                <span class="ferr" id="c-subject-e"></span>
+              </div>
+              <div class="fgroup">
+                <label for="c-address"><i class="fa-solid fa-location-dot"></i> Your Address (optional)</label>
+                <input type="text" id="c-address" placeholder="123 Main Street, City">
+              </div>
+              <div class="fgroup">
+                <label for="c-msg"><i class="fa-regular fa-message"></i> Message</label>
+                <textarea id="c-msg" placeholder="Write your message here..." maxlength="500" rows="5"></textarea>
+                <div class="char-count"><span id="char-num">0</span>/500</div>
+                <span class="ferr" id="c-msg-e"></span>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block" id="send-btn" style="padding:15px">
+                <i class="fa-solid fa-paper-plane"></i> Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <button id="btt" aria-label="Back to top"><i class="fa-solid fa-chevron-up"></i></button>
+  <script src="js/global.js"></script>
+  <script>
+    const fields = {
+      'c-name': [V.required, V.name],
+      'c-email': [V.required, V.email],
+      'c-subject': [V.required, V.minLen(4)],
+      'c-msg': [V.required, V.minLen(15), V.maxLen(500)],
+    };
+    const form = document.getElementById('contact-form');
+    setupLiveValidation(fields, form);
+
+    // Char counter
+    document.getElementById('c-msg').addEventListener('input', e => {
+      document.getElementById('char-num').textContent = e.target.value.length;
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      let ok = true;
+      Object.keys(fields).forEach(id => { if (!validateField(id, fields[id], form)) ok = false; });
+      if (!ok) { toast('Please fix the errors below.', 'bad'); return; }
+
+      const btn = document.getElementById('send-btn');
+      btn.innerHTML = '<i class="fa-solid fa-spinner" style="animation:spin 1s linear infinite"></i> Sending...';
+      btn.disabled = true;
+
+      // Save message
+      const msgs = JSON.parse(localStorage.getItem('bistro_messages') || '[]');
+      msgs.push({
+        name: document.getElementById('c-name').value,
+        email: document.getElementById('c-email').value,
+        subject: document.getElementById('c-subject').value,
+        address: document.getElementById('c-address').value,
+        message: document.getElementById('c-msg').value,
+        date: new Date().toISOString()
+      });
+      localStorage.setItem('bistro_messages', JSON.stringify(msgs));
+
+      setTimeout(() => {
+        document.getElementById('form-wrap').style.display = 'none';
+        document.getElementById('succ').classList.add('show');
+        toast('✅ Message sent successfully!', 'ok');
+      }, 1200);
+    });
+
+    function resetForm() {
+      document.getElementById('form-wrap').style.display = 'block';
+      document.getElementById('succ').classList.remove('show');
+      form.reset();
+      document.getElementById('char-num').textContent = '0';
+      document.getElementById('send-btn').disabled = false;
+      document.getElementById('send-btn').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+      Object.keys(fields).forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('err', 'ok'); } const ee = document.getElementById(id + '-e'); if (ee) ee.classList.remove('show'); });
+    }
+  </script>
+</body>
+
+</html>
