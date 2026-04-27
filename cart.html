@@ -239,17 +239,23 @@
       border-radius: 8px;
       cursor: pointer;
       transition: all .2s;
-      font-size: .85rem
+      font-size: .85rem;
+      user-select: none
     }
 
-    .delivery-opt:hover,
+    .delivery-opt:hover {
+      border-color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.05)
+    }
+
     .delivery-opt.selected {
       border-color: var(--accent);
       background: var(--badge)
     }
 
     .delivery-opt input {
-      accent-color: var(--accent)
+      accent-color: var(--accent);
+      cursor: pointer
     }
 
     .delivery-label {
@@ -361,6 +367,7 @@
   <script>
     let promoApplied = false;
     let deliveryFee = 2.99;
+    let selectedDeliveryIndex = 0;
 
     function renderCart() {
       const items = Cart.get();
@@ -436,21 +443,21 @@
         <!-- Delivery Options -->
         <p style="font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.6rem">Delivery Type</p>
         <div class="delivery-opts">
-          <label class="delivery-opt selected" onclick="setDelivery(2.99, this)">
-            <input type="radio" name="delivery" checked>
+          <div class="delivery-opt ${selectedDeliveryIndex === 0 ? 'selected' : ''}" onclick="setDelivery(2.99, 0)">
+            <input type="radio" name="delivery" value="0" ${selectedDeliveryIndex === 0 ? 'checked' : ''}>
             <span class="delivery-label"><strong>Standard Delivery</strong><br><small style="color:var(--muted)">30–45 min</small></span>
             <span class="delivery-price">$2.99</span>
-          </label>
-          <label class="delivery-opt" onclick="setDelivery(5.99, this)">
-            <input type="radio" name="delivery">
+          </div>
+          <div class="delivery-opt ${selectedDeliveryIndex === 1 ? 'selected' : ''}" onclick="setDelivery(5.99, 1)">
+            <input type="radio" name="delivery" value="1" ${selectedDeliveryIndex === 1 ? 'checked' : ''}>
             <span class="delivery-label"><strong>Express Delivery</strong><br><small style="color:var(--muted)">15–20 min</small></span>
             <span class="delivery-price">$5.99</span>
-          </label>
-          <label class="delivery-opt" onclick="setDelivery(0, this)">
-            <input type="radio" name="delivery">
+          </div>
+          <div class="delivery-opt ${selectedDeliveryIndex === 2 ? 'selected' : ''}" onclick="setDelivery(0, 2)">
+            <input type="radio" name="delivery" value="2" ${selectedDeliveryIndex === 2 ? 'checked' : ''}>
             <span class="delivery-label"><strong>Pick Up</strong><br><small style="color:var(--muted)">Ready in 15 min</small></span>
             <span class="delivery-price">Free</span>
-          </label>
+          </div>
         </div>
 
         <!-- Promo -->
@@ -497,10 +504,9 @@
       toast('Cart cleared!', 'info');
     }
 
-    function setDelivery(fee, el) {
+    function setDelivery(fee, index, el) {
       deliveryFee = fee;
-      document.querySelectorAll('.delivery-opt').forEach(o => o.classList.remove('selected'));
-      el.classList.add('selected');
+      selectedDeliveryIndex = index;
       renderCart();
     }
 
