@@ -18,8 +18,15 @@ const Auth = {
   KEY: 'br_user',
   ACCOUNTS_KEY: 'br_accounts',
   get() { try { return JSON.parse(localStorage.getItem(this.KEY)); } catch { return null; } },
-  save(u) { localStorage.setItem(this.KEY, JSON.stringify(u)); },
-  logout() { localStorage.removeItem(this.KEY); toast('Logged out!', 'info'); setTimeout(() => window.location.href = 'index.html', 800); },
+  save(u) { 
+    const currentUser = this.get();
+    // If switching to a different user, clear the cart
+    if (currentUser && currentUser.email !== u.email) {
+      Cart.clear();
+    }
+    localStorage.setItem(this.KEY, JSON.stringify(u)); 
+  },
+  logout() { Cart.clear(); localStorage.removeItem(this.KEY); toast('Logged out!', 'info'); setTimeout(() => window.location.href = 'index.html', 800); },
   loggedIn() { return !!this.get(); },
   
   // Get all registered accounts
@@ -45,6 +52,7 @@ const Auth = {
   updateNav() {
     const user = this.get();
     document.querySelectorAll('.nav-login-btn').forEach(b => b.style.display = user ? 'none' : '');
+    document.querySelectorAll('.nav-signup-btn').forEach(b => b.style.display = user ? 'none' : '');
     document.querySelectorAll('.nav-profile-btn').forEach(b => { b.style.display = user ? 'flex' : 'none'; });
     document.querySelectorAll('.nav-user-name').forEach(b => { if (user) b.textContent = (user.name || user.email || '').split(' ')[0]; });
   }
