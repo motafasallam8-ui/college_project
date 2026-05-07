@@ -502,7 +502,7 @@
 
       <div class="detail-img-box">
         <span class="bg-letter">${item.name[0]}</span>
-        <span class="detail-main-emoji">${item.emoji}</span>
+        <img src="${item.img}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;position:relative;z-index:1" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect fill=%22%23e0d5c7%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 text-anchor=%22middle%22 dy=%22.3em%22>${item.emoji}</text></svg>'">
         ${item.discount ? `<div class="disc-badge">🔥 ${item.discount}% OFF</div>` : ''}
         <div class="chef-badge">
           <span class="badge badge-gold"><i class="fa-solid fa-award"></i> Chef's Pick</span>
@@ -613,8 +613,7 @@
           const sd = s.discount ? +(s.price * (1 - s.discount / 100)).toFixed(2) : null;
           return `<article class="food-card">
         <div class="food-card-img">
-          <span class="bg-letter">${s.name[0]}</span>
-          <span style="position:relative;z-index:1;font-size:3.2rem">${s.emoji}</span>
+          <img src="${s.img}" alt="${s.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect fill=%22%23e0d5c7%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 text-anchor=%22middle%22 dy=%22.3em%22>${s.emoji}</text></svg>'">
           ${s.discount ? `<span class="badge badge-red" style="position:absolute;top:8px;right:8px">-${s.discount}%</span>` : ''}
         </div>
         <div class="food-card-body">

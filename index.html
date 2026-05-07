@@ -114,7 +114,9 @@
       width: 380px;
       height: 380px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--bg3), var(--card));
+      background: url(images/beef-burger.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
       border: 2px solid var(--border2);
       display: flex;
       align-items: center;
@@ -127,6 +129,7 @@
 
     .hero-circle::before {
       content: '';
+      
       position: absolute;
       inset: -12px;
       border-radius: 50%;
@@ -549,7 +552,7 @@
         </div>
       </div>
       <div class="hero-visual">
-        <div class="hero-circle">🍛</div>
+        <div class="hero-circle"></div>
         <div class="hero-float f1">
           <div class="fl-val">4.9 ⭐</div>
           <div class="fl-label">Customer Rating</div>
@@ -574,8 +577,7 @@
     <!-- ABOUT STRIP -->
     <section class="about-strip section">
       <div class="fade-up">
-        <div class="about-img-wrap">
-          🍴
+          <img src="images/resturant.jpg" style="background: no-repeat cover;">
           <div class="about-badge">
             <span class="about-badge-num">20+</span>
             <span class="about-badge-txt">Years of Craft</span>
@@ -681,10 +683,10 @@
   <script>
     // Popular dishes data
     const POPULAR = [
-      { id: 1, name: 'Grilled Lamb Chops', desc: 'Herb-marinated lamb, roasted veg, mint jus', price: 24.99, emoji: '🍖', cat: 'mains' },
-      { id: 2, name: 'Truffle Pasta', desc: 'Fresh pasta, Périgord truffle, Parmesan cream', price: 19.99, emoji: '🍝', cat: 'mains', discount: 15 },
-      { id: 3, name: 'Chocolate Lava Cake', desc: 'Warm Belgian chocolate, vanilla ice cream', price: 9.99, emoji: '🍫', cat: 'desserts' },
-      { id: 4, name: 'Mango Smoothie', desc: 'Fresh mango, yoghurt, honey, mint', price: 6.99, emoji: '🥭', cat: 'drinks' },
+      { id: 1, name: 'Grilled Lamb Chops', desc: 'Herb-marinated lamb, roasted veg, mint jus', price: 24.99, emoji: '🍖', img: 'images/lamb-tagine.jpg', cat: 'mains' },
+      { id: 2, name: 'Truffle Pasta', desc: 'Fresh pasta, Périgord truffle, Parmesan cream', price: 19.99, emoji: '🍝', img: 'images/truffle-pappardelle.jpg', cat: 'mains', discount: 15 },
+      { id: 3, name: 'Chocolate Lava Cake', desc: 'Warm Belgian chocolate, vanilla ice cream', price: 9.99, emoji: '🍫', img: 'images/chocolate-lava.jpg', cat: 'desserts' },
+      { id: 4, name: 'Mango Smoothie', desc: 'Fresh mango, yoghurt, honey, mint', price: 6.99, emoji: '🥭', img: 'images/mango-smoothie.jpg', cat: 'drinks' },
     ];
 
     function renderPopular() {
@@ -693,8 +695,7 @@
         const discPrice = item.discount ? (item.price * (1 - item.discount / 100)).toFixed(2) : null;
         return `<article class="food-card fade-up">
       <div class="food-card-img">
-        <span class="bg-letter">${item.name[0]}</span>
-        <span style="position:relative;z-index:1;font-size:4.5rem">${item.emoji}</span>
+        <img src="${item.img}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect fill=%22%23e0d5c7%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 text-anchor=%22middle%22 dy=%22.3em%22>${item.emoji}</text></svg>'">
         ${item.discount ? `<span class="badge badge-red" style="position:absolute;top:10px;right:10px">-${item.discount}%</span>` : ''}
       </div>
       <div class="food-card-body">

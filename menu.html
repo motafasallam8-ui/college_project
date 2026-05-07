@@ -206,38 +206,38 @@
   <script>
     const MENU_ITEMS = [
       // Starters
-      { id: 101, name: 'Bruschetta', emoji: '🥖', desc: 'Toasted sourdough, fresh tomato, basil, olive oil', price: 7.99, cat: 'starters' },
-      { id: 102, name: 'Soup of the Day', emoji: '🍲', desc: 'Freshly made daily with seasonal veg', price: 5.99, cat: 'starters' },
-      { id: 103, name: 'Garlic Mushrooms', emoji: '🍄', desc: 'Sautéed in butter, thyme, on toasted bread', price: 8.99, cat: 'starters' },
-      { id: 104, name: 'Caesar Salad', emoji: '🥗', desc: 'Romaine, croutons, Parmesan, Caesar dressing', price: 9.99, cat: 'starters' },
+      { id: 101, name: 'Bruschetta', emoji: '🥖', img: 'images/bruschetta.jpg', desc: 'Toasted sourdough, fresh tomato, basil, olive oil', price: 7.99, cat: 'starters' },
+      { id: 102, name: 'Soup of the Day', emoji: '🍲', img: 'images/soup-of-the-day.jpg', desc: 'Freshly made daily with seasonal veg', price: 5.99, cat: 'starters' },
+      { id: 103, name: 'Garlic Mushrooms', emoji: '🍄', img: 'images/garlic-mushrooms.jpg', desc: 'Sautéed in butter, thyme, on toasted bread', price: 8.99, cat: 'starters' },
+      { id: 104, name: 'Caesar Salad', emoji: '🥗', img: 'images/caesar-salad.jpg', desc: 'Romaine, croutons, Parmesan, Caesar dressing', price: 9.99, cat: 'starters' },
       // Mains
-      { id: 201, name: 'Grilled Chicken', emoji: '🍗', desc: 'Herb-marinated breast, roast potatoes, veg', price: 16.99, cat: 'mains' },
-      { id: 202, name: 'Beef Burger', emoji: '🍔', desc: 'Wagyu beef, brioche bun, truffle mayo, fries', price: 15.99, cat: 'mains', discount: 10 },
-      { id: 203, name: 'Lamb Tagine', emoji: '🫕', desc: 'Slow-cooked lamb, apricots, couscous, harissa', price: 19.99, cat: 'mains' },
-      { id: 204, name: 'Veggie Curry', emoji: '🍛', desc: 'Seasonal veg in aromatic coconut sauce', price: 13.99, cat: 'mains' },
+      { id: 201, name: 'Grilled Chicken', emoji: '🍗', img: 'images/grilled-chicken.jpg', desc: 'Herb-marinated breast, roast potatoes, veg', price: 16.99, cat: 'mains' },
+      { id: 202, name: 'Beef Burger', emoji: '🍔', img: 'images/beef-burger.jpg', desc: 'Wagyu beef, brioche bun, truffle mayo, fries', price: 15.99, cat: 'mains', discount: 10 },
+      { id: 203, name: 'Lamb Tagine', emoji: '🫕', img: 'images/lamb-tagine.jpg', desc: 'Slow-cooked lamb, apricots, couscous, harissa', price: 19.99, cat: 'mains' },
+      { id: 204, name: 'Veggie Curry', emoji: '🍛', img: 'images/veggie-curry.jpg', desc: 'Seasonal veg in aromatic coconut sauce', price: 13.99, cat: 'mains' },
       // Grills
-      { id: 301, name: 'Ribeye Steak', emoji: '🥩', desc: '300g USDA ribeye, chimichurri, grilled veg', price: 34.99, cat: 'grills' },
-      { id: 302, name: 'Mixed Grill Platter', emoji: '🍖', desc: 'Chicken, lamb, kofta, grilled tomato, bread', price: 28.99, cat: 'grills' },
-      { id: 303, name: 'BBQ Ribs', emoji: '🦴', desc: 'Fall-off-the-bone ribs, smoky BBQ sauce, coleslaw', price: 24.99, cat: 'grills', discount: 15 },
+      { id: 301, name: 'Ribeye Steak', emoji: '🥩', img: 'images/ribeye-steak.jpg', desc: '300g USDA ribeye, chimichurri, grilled veg', price: 34.99, cat: 'grills' },
+      { id: 302, name: 'Mixed Grill Platter', emoji: '🍖', img: 'images/mixed-grill.jpg', desc: 'Chicken, lamb, kofta, grilled tomato, bread', price: 28.99, cat: 'grills' },
+      { id: 303, name: 'BBQ Ribs', emoji: '🦴', img: 'images/bbq-ribs.jpg', desc: 'Fall-off-the-bone ribs, smoky BBQ sauce, coleslaw', price: 24.99, cat: 'grills', discount: 15 },
       // Seafood
-      { id: 401, name: 'Grilled Salmon', emoji: '🐟', desc: 'Atlantic salmon fillet, lemon butter, capers', price: 22.99, cat: 'seafood' },
-      { id: 402, name: 'Prawn Linguine', emoji: '🦐', desc: 'King prawns, white wine, cherry tomato, chilli', price: 21.99, cat: 'seafood' },
-      { id: 403, name: 'Fish & Chips', emoji: '🐠', desc: 'Beer-battered cod, thick-cut chips, tartare sauce', price: 14.99, cat: 'seafood' },
+      { id: 401, name: 'Grilled Salmon', emoji: '🐟', img: 'images/grilled-salmon.jpg', desc: 'Atlantic salmon fillet, lemon butter, capers', price: 22.99, cat: 'seafood' },
+      { id: 402, name: 'Prawn Linguine', emoji: '🦐', img: 'images/prawn-linguine.jpg', desc: 'King prawns, white wine, cherry tomato, chilli', price: 21.99, cat: 'seafood' },
+      { id: 403, name: 'Fish & Chips', emoji: '🐠', img: 'images/fish-chips.jpg', desc: 'Beer-battered cod, thick-cut chips, tartare sauce', price: 14.99, cat: 'seafood' },
       // Pasta
-      { id: 501, name: 'Spaghetti Bolognese', emoji: '🍝', desc: 'Slow-cooked beef ragu, fresh pasta, Parmesan', price: 14.99, cat: 'pasta' },
-      { id: 502, name: 'Truffle Pappardelle', emoji: '🍜', desc: 'Black truffle, cream, wild mushrooms, Pecorino', price: 19.99, cat: 'pasta' },
-      { id: 503, name: 'Penne Arrabbiata', emoji: '🌶', desc: 'Spicy tomato sauce, chilli, garlic, basil', price: 12.99, cat: 'pasta' },
+      { id: 501, name: 'Spaghetti Bolognese', emoji: '🍝', img: 'images/spaghetti-bolognese.jpg', desc: 'Slow-cooked beef ragu, fresh pasta, Parmesan', price: 14.99, cat: 'pasta' },
+      { id: 502, name: 'Truffle Pappardelle', emoji: '🍜', img: 'images/truffle-pappardelle.jpg', desc: 'Black truffle, cream, wild mushrooms, Pecorino', price: 19.99, cat: 'pasta' },
+      { id: 503, name: 'Penne Arrabbiata', emoji: '🌶', img: 'images/penne-arrabbiata.jpg', desc: 'Spicy tomato sauce, chilli, garlic, basil', price: 12.99, cat: 'pasta' },
       // Desserts
-      { id: 601, name: 'Chocolate Lava Cake', emoji: '🍫', desc: 'Warm Belgian chocolate, vanilla ice cream', price: 9.99, cat: 'desserts' },
-      { id: 602, name: 'Crème Brûlée', emoji: '🍮', desc: 'Vanilla custard, caramelised sugar crust', price: 8.99, cat: 'desserts' },
-      { id: 603, name: 'Mango Sorbet', emoji: '🍨', desc: 'Fresh mango, coconut milk, mint', price: 6.99, cat: 'desserts' },
-      { id: 604, name: 'Baklava', emoji: '🧁', desc: 'Layered filo, pistachio, honey syrup', price: 7.99, cat: 'desserts' },
+      { id: 601, name: 'Chocolate Lava Cake', emoji: '🍫', img: 'images/chocolate-lava.jpg', desc: 'Warm Belgian chocolate, vanilla ice cream', price: 9.99, cat: 'desserts' },
+      { id: 602, name: 'Crème Brûlée', emoji: '🍮', img: 'images/creme-brulee.jpg', desc: 'Vanilla custard, caramelised sugar crust', price: 8.99, cat: 'desserts' },
+      { id: 603, name: 'Mango Sorbet', emoji: '🍨', img: 'images/mango-sorbet.jpg', desc: 'Fresh mango, coconut milk, mint', price: 6.99, cat: 'desserts' },
+      { id: 604, name: 'Baklava', emoji: '🧁', img: 'images/baklava.jpg', desc: 'Layered filo, pistachio, honey syrup', price: 7.99, cat: 'desserts' },
       // Drinks
-      { id: 701, name: 'Fresh Orange Juice', emoji: '🍊', desc: 'Freshly squeezed, no added sugar', price: 4.99, cat: 'drinks' },
-      { id: 702, name: 'Mango Smoothie', emoji: '🥭', desc: 'Mango, yoghurt, honey, fresh mint', price: 6.99, cat: 'drinks' },
-      { id: 703, name: 'Lemonade', emoji: '🍋', desc: 'House-made, sparkling water, fresh mint', price: 4.49, cat: 'drinks' },
-      { id: 704, name: 'Arabic Coffee', emoji: '☕', desc: 'Cardamom coffee, dates on the side', price: 3.99, cat: 'drinks' },
-      { id: 705, name: 'Rose Milkshake', emoji: '🌹', desc: 'Rosewater, milk, ice cream, rose petals', price: 6.49, cat: 'drinks' },
+      { id: 701, name: 'Fresh Orange Juice', emoji: '🍊', img: 'images/orange-juice.jpg', desc: 'Freshly squeezed, no added sugar', price: 4.99, cat: 'drinks' },
+      { id: 702, name: 'Mango Smoothie', emoji: '🥭', img: 'images/mango-smoothie.jpg', desc: 'Mango, yoghurt, honey, fresh mint', price: 6.99, cat: 'drinks' },
+      { id: 703, name: 'Lemonade', emoji: '🍋', img: 'images/lemonade.jpg', desc: 'House-made, sparkling water, fresh mint', price: 4.49, cat: 'drinks' },
+      { id: 704, name: 'Arabic Coffee', emoji: '☕', img: 'images/arabic-coffee.jpg', desc: 'Cardamom coffee, dates on the side', price: 3.99, cat: 'drinks' },
+      { id: 705, name: 'Rose Milkshake', emoji: '🌹', img: 'images/rose-milkshake.jpg', desc: 'Rosewater, milk, ice cream, rose petals', price: 6.49, cat: 'drinks' },
     ];
 
     let current = 'all';
@@ -251,8 +251,7 @@
         const disc = item.discount ? (item.price * (1 - item.discount / 100)).toFixed(2) : null;
         return `<article class="food-card show fade-up" data-cat="${item.cat}" style="animation-delay:${i * 50}ms">
       <div class="food-card-img">
-        <span class="bg-letter">${item.name[0]}</span>
-        <span style="position:relative;z-index:1;font-size:4.5rem">${item.emoji}</span>
+        <img src="${item.img}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect fill=%22%23e0d5c7%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 text-anchor=%22middle%22 dy=%22.3em%22>${item.emoji}</text></svg>'">
         ${item.discount ? `<span class="badge badge-red" style="position:absolute;top:10px;right:10px">-${item.discount}%</span>` : ''}
       </div>
       <div class="food-card-body">
